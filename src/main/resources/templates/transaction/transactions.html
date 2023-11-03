@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts :: header">
+</head>
+<body>
+
+<nav th:replace="layouts :: navbar"></nav>
+
+<style>
+    .bgimg {
+        background-image: url('/img/theImage.jpg');
+    }
+</style>
+
+<div class="bgimg">
+    <div class="middle">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th> Перевод со счёта</th>
+                <th> Перевод на счёт</th>
+                <th>Тип</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+                <th>Время</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="aTransaction : ${transactions}">
+                <td th:text="${aTransaction.getFromaccount_id()}">
+                <td th:text="${aTransaction.getToaccount_id()}">
+                <td th:text="${aTransaction.getType_tr()}">
+                <td th:text="${aTransaction.getAmount()}">
+                <td th:text="${aTransaction.getDate()}">
+                <td th:text="${aTransaction.getTime()}">
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

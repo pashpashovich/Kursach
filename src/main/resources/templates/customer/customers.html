@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts :: header">
+</head>
+<body>
+
+<nav th:replace="layouts :: navbar"></nav>
+
+<style>
+    .bgimg {
+        background-image: url('/img/people.jpg');
+    }
+</style>
+
+<div class="bgimg">
+    <div class="middle">
+
+
+
+<div class="container">
+    <h3>Customers</h3>
+    <hr>
+
+    <a th:href="@{/customers/new-customer}"
+       class="btn btn-primary btn-sm mb-3"> 
+        Add Customer 
+    </a> 
+    <br>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Customer Account #</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Balance</th>
+            <th>Account</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="aCustomer : ${customers}">
+            <td th:text="${aCustomer.customerId}">
+            <td th:text="${aCustomer.fio}">
+            <td th:text="${aCustomer.email}">
+            <td th:text="${aCustomer.balance}">
+            <td><a  th:href="@{'/customers/' + ${aCustomer.customerId}}" class="btn btn-primary btn-sm mb-3">Goto Account</a></td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,663 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+* {
+    font-family: Arial;
+}
+
+.bgimg {
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+td, th {
+    text-align: center !important;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd !important;
+}
+
+tr:nth-child(odd) {
+    background-color: #F2F3F4 !important;
+}
+
+td {
+    border: 2px solid black !important;
+}
+
+h1,h2,h3 {
+    display: inline;
+    color: black;
+    background-color: sandybrown;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.middle {
+    font-weight: bold;
+    font-family: Arial;
+    text-align: center;
+    width: 50%;
+    margin: auto;
+}
+
+hr {
+    margin: 6px;
+    width: 100%;
+}
+.screen {
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.screen .overlap-group-wrapper {
+    background-color: #ffffff;
+    overflow: hidden;
+    width: 1920px;
+    height: 1080px;
+}
+
+.screen .overlap-group {
+    position: relative;
+    width: 1933px;
+    height: 1140px;
+    left: -13px;
+}
+
+.screen .image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 13px;
+    object-fit: cover;
+}
+
+.screen .logo {
+    position: absolute;
+    width: 145px;
+    height: 71px;
+    top: 3%;
+    left: 3%;
+    background: transparent;
+}
+
+.screen .rectangle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 13px;
+    background-color: #3f3f3f;
+    opacity: 0.7;
+}
+
+.screen .text-wrapper {
+    width: 483px;
+    height: 109px;
+    top: 4%;
+    left: 6%;
+    font-family: "Playfair Display", Helvetica;
+    font-weight: 700;
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .div {
+    width: 434px;
+    height: 58px;
+    top: 5%;
+    left: 30%;
+    font-family: "Playfair Display", Helvetica;
+    font-weight: 700;
+    font-size: 30px;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .text-wrapper-2 {
+    width: 278px;
+    height: 58px;
+    top: 5%;
+    left: 1206px;
+    font-family: "Philosopher", Helvetica;
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .text-wrapper-3 {
+    width: 278px;
+    height: 58px;
+    top: 5%;
+    left: 1004px;
+    font-family: "Philosopher", Helvetica;
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .text-wrapper-4 {
+    width: 829px;
+    height: 209px;
+    top: 145px;
+    left: 0;
+    font-family: "Playfair Display", Helvetica;
+    font-weight: 700;
+    font-size: 55px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .img {
+    position: absolute;
+    width: 424px;
+    height: 76px;
+    top: 49%;
+    left: 14%;
+    background-color: #16725c99;
+    border-radius: 50px;
+}
+
+.screen .text-wrapper-5 {
+    width: 446px;
+    height: 92px;
+    top: 49.5%;
+    left: 14%;
+    font-family: "Philosopher", Helvetica;
+    font-weight: 400;
+    font-size: 45px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .rectangle-2 {
+    position: absolute;
+    width: 424px;
+    height: 76px;
+    top: 40%;
+    left: 14%;
+    background-color: #16725c99;
+    border-radius: 50px;
+}
+
+.screen .text-wrapper-6 {
+    width: 446px;
+    height: 92px;
+    top: 41%;
+    left: 14%;
+    font-family: "Philosopher", Helvetica;
+    font-weight: 400;
+    font-size: 45px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .p {
+    width: 772px;
+    height: 162px;
+    top: 27%;
+    left: 8%;
+    font-family: "Playfair Display", Helvetica;
+    font-weight: 500;
+    font-size: 35px;
+    position: absolute;
+    color: #ffffff;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .iconvk {
+    position: absolute;
+    width: 34px;
+    height: 26px;
+    top: 1027px;
+    left: 1301px;
+}
+
+.screen .icontwitter {
+    position: absolute;
+    width: 34px;
+    height: 26px;
+    top: 1024px;
+    left: 1358px;
+}
+
+.screen .text-wrapper-7 {
+    position: absolute;
+    width: 687px;
+    height: 23px;
+    top: 1026px;
+    left: 1206px;
+    font-family: "Phetsarath-Regular", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+.screen .vector {
+    left: 1252px;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    top: 1026px;
+}
+
+.screen .vector-2 {
+    left: 1193px;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    top: 1026px;
+}
+.frame {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.frame .div {
+    background-color: #ffffff;
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+}
+
+.frame .overlap {
+    position: absolute;
+    width: 532px;
+    height: 109px;
+    top: -6px;
+    left: 50px;
+}
+
+.frame .text-wrapper {
+    width: 478px;
+    height: 109px;
+    top: 21%;
+    left: 54px;
+    font-family: "Playfair Display", Helvetica;
+    font-weight: 700;
+    color: #000000;
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .kisspng-line-chart {
+    position: absolute;
+    width: 145px;
+    height: 71px;
+    top: 24px;
+    left: 0;
+    background-blend-mode: darken;
+}
+
+.frame .overlap-group {
+    position: absolute;
+    width: 1613px;
+    height: 894px;
+    top: 104px;
+    left: 0;
+}
+
+.frame .rectangle {
+    position: absolute;
+    width: 1138px;
+    height: 650px;
+    top: 111px;
+    left: 18%;
+    background-color: #16725c99;
+}
+
+.frame .text-wrapper-2 {
+    width: 658px;
+    top: 155px;
+    left: 37%;
+    font-family: "Plaster", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .img {
+    position: absolute;
+    width: 505px;
+    height: 85px;
+    top: 264px;
+    left: 42%;
+}
+
+.frame .text-wrapper-3 {
+    width: 447px;
+    top: 291px;
+    left: 814px;
+    font-family: "Plaster", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 30px;
+    position: absolute;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .rectangle-2 {
+    position: absolute;
+    width: 218px;
+    height: 65px;
+    top: 542px;
+    left: 929px;
+    background-color: #d9d9d9;
+    border-radius: 40px;
+}
+
+.frame .text-wrapper-4 {
+    width: 160px;
+    top: 550px;
+    left: 958px;
+    font-family: "Plaster", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 30px;
+    text-align: center;
+    position: absolute;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .text-wrapper-5 {
+    width: 313px;
+    top: 642px;
+    left: 717px;
+    font-family: "Phetsarath-Regular", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 30px;
+    text-align: center;
+    position: absolute;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .text-wrapper-6 {
+    width: 313px;
+    top: 645px;
+    left: 1054px;
+    font-family: "Plaster", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 30px;
+    text-align: center;
+    position: absolute;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .image {
+    position: absolute;
+    width: 751px;
+    height: 894px;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+}
+
+.frame .text-wrapper-7 {
+    position: absolute;
+    width: 687px;
+    height: 23px;
+    top: 1037px;
+    left: 694px;
+    font-family: "Phetsarath-Regular", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: normal;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+.frame .element {
+    position: absolute;
+    height: 68px;
+    top: 1px;
+    left: 1607px;
+    font-family: "Philosopher", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 30px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.frame .span {
+    text-decoration: underline;
+}
+
+.frame .text-wrapper-8 {
+    font-family: "Philosopher", Helvetica;
+    font-weight: 400;
+    color: #000000;
+    font-size: 30px;
+    letter-spacing: 0;
+}
+
+body,
+.signin {
+    background-color: #d3d3d3;
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.login {
+    position: relative;
+    height: 560px;
+    width: 405px;
+    margin: auto;
+    padding: 60px 60px;
+    background: url(https://picsum.photos/id/1004/5616/3744) no-repeat   center center #505050;
+    background-size: cover;
+    box-shadow: 0px 30px 60px -5px #000;
+}
+
+form {
+    padding-top: 80px;
+}
+
+.active {
+    border-bottom: 2px solid #1161ed;
+}
+
+.nonactive {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+h2 {
+    padding-left: 12px;
+    font-size: 22px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+    display: inline-block;
+    font-weight: 100;
+}
+
+h2:first-child {
+    padding-left: 0px;
+}
+
+span {
+    text-transform: uppercase;
+    font-size: 12px;
+    opacity: 0.4;
+    display: inline-block;
+    position: relative;
+    top: -65px;
+    transition: all 0.5s ease-in-out;
+}
+
+.text {
+    border: none;
+    width: 89%;
+    padding: 10px 20px;
+    display: block;
+    height: 25px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0);
+    overflow: hidden;
+    margin-top: 15px;
+    transition: all 0.5s ease-in-out;
+}
+
+.text:focus {
+    outline: 0;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+}
+
+.text:focus + span {
+    opacity: 0.6;
+}
+
+input[type="text"],
+input[type="password"] {
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+}
+
+
+
+input {
+    display: inline-block;
+    padding-top: 20px;
+    font-size: 14px;
+}
+
+h2,
+span,
+.custom-checkbox {
+    margin-left: 20px;
+}
+
+.custom-checkbox {
+    -webkit-appearance: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 2px;
+    display: inline-block;
+    position: relative;
+    top: 6px;
+}
+
+.custom-checkbox:checked {
+    background-color: rgba(17, 97, 237, 1);
+}
+
+.custom-checkbox:checked:after {
+    content: '\2714';
+    font-size: 10px;
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    color: #fff;
+}
+
+.custom-checkbox:focus {
+    outline: none;
+}
+
+label {
+    display: inline-block;
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
+.signin {
+    background-color: #1161ed;
+    color: #FFF;
+    width: 100%;
+    padding: 10px 20px;
+    display: block;
+    height: 39px;
+    border-radius: 20px;
+    margin-top: 30px;
+    transition: all 0.5s ease-in-out;
+    border: none;
+    text-transform: uppercase;
+}
+
+.signin:hover {
+    background: #4082f5;
+    box-shadow: 0px 4px 35px -5px #4082f5;
+    cursor: pointer;
+}
+
+.signin:focus {
+    outline: none;
+}
+
+hr {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    top: 85px;
+    position: relative;
+}
+
+a {
+    text-align: center;
+    display: block;
+    top: 120px;
+    position: relative;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.2);
+}
+

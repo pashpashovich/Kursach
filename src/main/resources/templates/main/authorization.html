@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/globals.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+<div class="frame">
+    <div class="div">
+        <div class="overlap">
+            <div class="text-wrapper">ПрогрессБанк</div>
+            <img
+                    class="kisspng-line-chart"
+                    src="/static/img/logo.png"
+            />
+        </div>
+        <div class="overlap-group">
+            <div class="rectangle"></div>
+            <div class="text-wrapper-5">Забыли пароль?</div>
+            <div class="text-wrapper-6">Регистрация</div>
+            <img class="image" src="/static/img/image-1.png" />
+        </div>
+
+        <a href="mailto:callcenter@belinvestbank.by" target="_blank" rel="noopener noreferrer"
+        ><div class="text-wrapper-7">callcenter@progressBank.by</div></a
+        >
+        <p class="element">
+            <a href="tel:146" target="_blank" rel="noopener noreferrer"
+            ><span class="span"><br /></span
+            ></a>
+            <span class="text-wrapper-8">+375 (17) 255-55-55</span>
+        </p>
+    </div>
+</div>
+<div class="overlap-group">
+    <div >
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+        <div class="login">
+            <h2 class="active"> sign in </h2>
+            <h2 class="nonactive"> sign up </h2>
+            <form style="position: absolute;left:300px;top: 200px" th:method="POST" th:action="@{/auth}" th:object="${user}">
+                <input type ="text" th:field="*{login}" class="text" name="username">
+                <span>Введите ваш логин</span>
+                <br>
+                <br>
+                <input type="password" th:field="*{password}" class="text" name="password">
+                <span>Введите ваш пароль</span>
+                <br>
+                <button class="signin">
+                    Sign In
+                </button>
+                <hr>
+                <a href="#">Forgot Password?</a>
+            </form>
+
+        </div>
+    </div>
+    <div class="text-wrapper-5">Забыли пароль?</div>
+    <div class="text-wrapper-6">Регистрация</div>
+    <img class="image" src="/static/img/image-1.png" />
+
+
+    <a href="mailto:callcenter@belinvestbank.by" target="_blank" rel="noopener noreferrer"
+    ><div class="text-wrapper-7">callcenter@progressBank.by</div></a
+    >
+    <p class="element">
+        <a href="tel:146" target="_blank" rel="noopener noreferrer"
+        ><span class="span"><br /></span
+        ></a>
+        <span class="text-wrapper-8">+375 (17) 255-55-55</span>
+    </p>
+</div>
+</body>
+</html>
