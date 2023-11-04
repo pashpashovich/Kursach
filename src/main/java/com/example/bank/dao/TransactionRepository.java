@@ -13,4 +13,6 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     List<Transaction> findAll();
 
     List<Transaction> findAllByFromaccountAndToaccount(Long from,Long to);
+
+    Transaction findFirstByFromaccountOrderByDateDescTimeDesc(Long fromAccount);
 }

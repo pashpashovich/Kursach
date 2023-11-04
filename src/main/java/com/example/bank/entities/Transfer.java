@@ -2,17 +2,17 @@ package com.example.bank.entities;
 
 public class Transfer {
 
-    private long toId;
+    private String toId;
     private double balance;
 
     public Transfer() {
     }
 
-    public long getToId() {
+    public String getToId() {
         return toId;
     }
 
-    public void setToId(long toId) {
+    public void setToId(String toId) {
         this.toId = toId;
     }
 

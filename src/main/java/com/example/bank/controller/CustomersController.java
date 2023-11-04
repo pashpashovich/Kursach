@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,25 +67,33 @@ public class CustomersController {
 
     @RequestMapping(value = "/transfer/{fromId}", method = RequestMethod.POST)
     public String transferAmount(@PathVariable String fromId, Transfer transfer, Model model) {
-
-        Customer toCustomer = customerRepository.findById(transfer.getToId()).get();
+        Customer toCustomer = customerRepository.findById(Long.parseLong(transfer.getToId())).get();
         Customer fromCustomer = customerRepository.findById(Long.parseLong(fromId)).get();
-
+        System.out.println(Long.parseLong(transfer.getToId()));
+        List<Account> fromAccount = accountsRepository.findAllByAccountid(fromCustomer.getCustomerId());
+        List<Account> toAccount = accountsRepository.findAllByAccountid(Long.parseLong(transfer.getToId()));
+        Transaction transaction = new Transaction(generateId(LocalDate.now(),LocalTime.now()),Transaction_type.ACCOUNT_TRANSFER.name(),fromAccount.get(0).getAccountnumber(),
+                toAccount.get(0).getAccountnumber(),transfer.getBalance(), LocalDate.now(), LocalTime.now().withNano(0));
+        transactionRepository.save(transaction);
         if (fromCustomer.getBalance() >= transfer.getBalance()) {
             customerRepository.updateCustomer(fromCustomer.getBalance() - transfer.getBalance(),
                     fromCustomer.getCustomerId());
             customerRepository.updateCustomer(toCustomer.getBalance() + transfer.getBalance(),
                     toCustomer.getCustomerId());
+            accountsRepository.updateAccountByAccountnumber(fromAccount.get(0).getAccountnumber(),fromAccount.get(0).getBalance() - transfer.getBalance());
+            accountsRepository.updateAccountByAccountnumber(toAccount.get(0).getAccountnumber(),toAccount.get(0).getBalance() + transfer.getBalance());
         }
+        return "redirect:/customers/"+fromId;
+    }
 
-        model.addAttribute("customer",fromCustomer);
-
-        Transaction transaction = new Transaction(Transaction_type.ACCOUNT_TRANSFER.name(),fromCustomer.getCustomerId(),
-                toCustomer.getCustomerId(),transfer.getBalance(), LocalDate.now(), LocalTime.now());
-
-        transactionRepository.save(transaction);
-
-        return "redirect:/customers";
+    public long generateId(LocalDate date, LocalTime time) {
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        int day = date.getDayOfMonth();
+        int hours = time.getHour();
+        int minutes = time.getMinute();
+        int seconds = time.getSecond();
+        return (year * 100000000 + month * 1000000 + day * 10000 + hours * 100 + minutes * 10 + seconds);
     }
 
 }

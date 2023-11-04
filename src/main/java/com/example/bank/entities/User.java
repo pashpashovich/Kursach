@@ -12,13 +12,13 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    Long user_id;
+    private Long user_id;
     /** This is the unique name of the user*/
     @Column(name = "login")
-    String login;
+    private String login;
     /** This is the hashed password with salt of the user to get into the app*/
     @Column(name = "password")
-    String password;
+    private String password;
 
     /**
      * This is the constructor with all fields

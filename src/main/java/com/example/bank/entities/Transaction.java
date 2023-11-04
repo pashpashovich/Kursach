@@ -1,17 +1,23 @@
 package com.example.bank.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 @Table(name = "transactions")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_generator")
-    @SequenceGenerator(name = "transaction_generator", sequenceName = "transaction_seq", allocationSize = 1)
-    private long transactionId;
+    @Column(name = "transaction_id", nullable = false)
+    private Long transactionId;
     private String type_tr;
     private Long fromaccount;
     private Long toaccount;
@@ -23,11 +29,11 @@ public class Transaction {
 
     }
 
-
-    public Transaction(String type_tr, Long fromaccount_id, Long toaccount_id, double amount, LocalDate date, LocalTime time) {
+    public Transaction(Long transactionId, String type_tr, Long fromaccount, Long toaccount, double amount, LocalDate date, LocalTime time) {
+        this.transactionId = transactionId;
         this.type_tr = type_tr;
-        this.fromaccount = fromaccount_id;
-        this.toaccount= toaccount_id;
+        this.fromaccount = fromaccount;
+        this.toaccount = toaccount;
         this.amount = amount;
         this.date = date;
         this.time = time;
@@ -89,3 +95,4 @@ public class Transaction {
         this.time = time;
     }
 }
+
