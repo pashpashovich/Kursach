@@ -7,6 +7,11 @@ import com.example.bank.entities.Account;
 import com.example.bank.entities.Customer;
 import com.example.bank.entities.Transaction;
 import com.example.bank.entities.Transfer;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,10 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
+import java.nio.file.Files;
 
 @Controller
 public class CheckDownloadController {
@@ -34,31 +38,44 @@ public class CheckDownloadController {
 
     @RequestMapping(value = "/download/{fromId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<byte[]> downloadFile(@PathVariable String fromId, Transfer transfer, Model model) {
-        String fileName = "check_" + System.currentTimeMillis() + ".txt"; // генерируем уникальное имя файла
-        File file = new File("/D:/Java/cleverBank/src/check/" + fileName);
-        Account account=accountsRepository.findFirstByAccountid(Long.parseLong(fromId));
-        Transaction transaction=transactionRepository.findFirstByFromaccountOrderByDateDescTimeDesc(account.getAccountnumber());
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write("\tБанковский чек\n");
-            writer.write("Чек: " + System.currentTimeMillis()  + "\n");
-            writer.write(transaction.getDate() + "\t" + transaction.getTime() + "\n");
-            writer.write("Тип транзакции: " + transaction.getType_tr() + "\n");
-            writer.write("Счёт отправителя: " + transaction.getFromaccount_id() + "\n");
-            writer.write("Счёт получателя: " + transaction.getToaccount_id() + "\n");
-            writer.write("Сумма транзакции: " + transaction.getAmount() + "\n");
-        } catch (IOException e) {
+        try {
+            String fileName = "check_" + System.currentTimeMillis() + ".pdf";
+            File pdfFile = new File("C:/Users/Павел/AppData/Local/Temp/Bank/src/checks/" + fileName);
+
+            // Создайте новый документ PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+            document.open();
+            Account account = accountsRepository.findFirstByAccountid(Long.parseLong(fromId));
+            Transaction transaction = transactionRepository.findFirstByFromaccountOrderByDateDescTimeDesc(account.getAccountnumber());
+            BaseFont baseFont = BaseFont.createFont("C:/Users/Павел/Downloads/Arial Cyr/Arial Cyr.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font font = new Font(baseFont, 12);
+            // Добавьте содержимое в PDF-документ
+            Paragraph title = new Paragraph("Банковский чек",font);
+            Paragraph checkDetails = new Paragraph("Чек: " + System.currentTimeMillis(),font);
+            Paragraph transactionDetails = new Paragraph(
+                    transaction.getDate() + " " + transaction.getTime() + "\n" +
+                            "Тип транзакции: " + transaction.getType_tr() + "\n" +
+                            "Счёт отправителя: " + transaction.getFromaccount_id() + "\n" +
+                            "Счёт получателя: " + transaction.getToaccount_id() + "\n" +
+                            "Сумма транзакции: " + transaction.getAmount(), font
+            );
+            document.add(title);
+            document.add(checkDetails);
+            document.add(transactionDetails);
+            document.close();
+            byte[] fileContent = Files.readAllBytes(pdfFile.toPath());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", fileName);
+
+            return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+        } catch (Exception e) {
             e.printStackTrace();
+            // Обработка ошибки
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        byte[] fileContent=null;
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            fileContent = IOUtils.toByteArray(fileInputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", fileName); // Используйте имя файла, которое вы сгенерировали
-        return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
     }
+
 }
 
