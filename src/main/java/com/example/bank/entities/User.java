@@ -1,60 +1,23 @@
 package com.example.bank.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
-/**
- * The class of User of the app with fields user_id,login and password
- */
+@Data
 @Entity
-@Table(name = "users")
+@Table(name = "users2")
 public class User {
-    /** This is the unique number of the user */
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
-    private Long user_id;
-    /** This is the unique name of the user*/
-    @Column(name = "login")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true)
     private String login;
-    /** This is the hashed password with salt of the user to get into the app*/
-    @Column(name = "password")
     private String password;
+    private String roles;
 
-    /**
-     * This is the constructor with all fields
-     * @param login the unique name of the user
-     * @param password the hashed password with salt of the user to get into the app
-     */
+    public User(String login, String password, String roles) {
 
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
-
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public User() {

@@ -21,12 +21,12 @@
                 <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
                 <div class="login">
                     <h2 > Авторизация </h2>
-                    <form style="position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%);" th:method="POST" th:action="@{/auth}" th:object="${user}">
-                        <input type="text" th:field="*{login}" class="text" name="username">
+                    <form style="position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%);" method="post" action="/procces_login">
+                        <input type="text"  class="text" name="username" id="username">
                         <span>Введите ваш логин</span>
                         <br>
                         <br>
-                        <input type="password" th:field="*{password}" class="text" name="password">
+                        <input type="password"  class="text" name="password" id="password">
                         <span>Введите ваш пароль</span>
                         <br>
                         <button class="signin">

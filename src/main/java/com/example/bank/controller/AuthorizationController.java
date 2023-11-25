@@ -24,34 +24,33 @@ public class AuthorizationController {
 
 
     @GetMapping
-    public String getHome(Model model) {
-        model.addAttribute("user", new User());
+    public String login() {
         return "main/authorization";
     }
 
-    @PostMapping
-    public String authorization(
-            @ModelAttribute("user") User user,
-            RedirectAttributes redirectAttributes
-    ) {
-        if (isValidUser(user.getLogin(), user.getPassword())) {
-            User user2=userRepository.findUserByLogin(user.getLogin());
-            System.out.println(user2.getUser_id());
-            redirectAttributes.addAttribute("id", Long.toString(user2.getUser_id()));
-            return "redirect:/customers/{id}";
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    private boolean isValidUser(String username, String password) {
-        System.out.println(username);
-        User user=userRepository.findUserByLogin(username);
-        if (user!=null) {
-            if (user.getPassword().equals(password))
-                return true;
-            else return false;
-        }
-        return false;
-    }
+//    @PostMapping
+//    public String authorization(
+//            @ModelAttribute("user") User user,
+//            RedirectAttributes redirectAttributes
+//    ) {
+//        if (isValidUser(user.getLogin(), user.getPassword())) {
+//            User user2=userRepository.findUserByLogin(user.getLogin());
+//            System.out.println(user2.getId());
+//            redirectAttributes.addAttribute("id", Long.toString(user2.getId()));
+//            return "redirect:/customers/{id}";
+//        } else {
+//            return "redirect:/";
+//        }
+//    }
+//
+//    private boolean isValidUser(String username, String password) {
+//        System.out.println(username);
+//        User user=userRepository.findUserByLogin(username);
+//        if (user!=null) {
+//            if (user.getPassword().equals(password))
+//                return true;
+//            else return false;
+//        }
+//        return false;
+//    }
 }

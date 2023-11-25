@@ -1,8 +1,13 @@
 package com.example.bank.controller;
 
+import com.example.bank.config.OurUserInfoDetails;
 import com.example.bank.dao.UserRepository;
+import com.example.bank.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -12,6 +17,13 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @GetMapping("/ShowUserInfo")
+    public String showUserInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OurUserInfoDetails user = (OurUserInfoDetails) authentication.getPrincipal();
+        System.out.println( user);
+        return "home";
+    }
 
 //    @GetMapping
 //    public String getCustomers(Model model) {

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="/static/css/globals.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" th:href="@{/css/globals.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
 </head>
 <body>
 <div class="frame">
@@ -19,10 +19,10 @@
                 <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
                 <div class="login">
                     <h2 > Регистрация </h2>
-                    <form th:method="POST" th:action="@{/reg}" th:object="${reg}">
+                    <form method="post" th:action="@{/reg}" th:object="${reg}">
                         <input type ="text" th:field="*{user.login}" class="text" name="username">
                         <span>Придумайте себе логин</span>
-                        <br>
+                        <br>`
                         <br>
                         <input type="password" th:field="*{user.password}" class="text" name="password">
                         <span>Придумайте себе пароль</span>
