@@ -5,6 +5,7 @@ import com.example.bank.dao.CustomerRepository;
 import com.example.bank.dao.TransactionRepository;
 import com.example.bank.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,53 +37,47 @@ public class CustomersController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @Secured("ROLE_USER")
     public String getACustomer(@PathVariable String id, Model model) {
         Optional<Customer> customerOptional = customerRepository.findById(Long.parseLong(id));
-
         Customer customer = customerOptional.orElse(new Customer());
-
         List<Customer> customerList = customerRepository.findAll();
-        List<Account> accountList=accountsRepository.findAllByAccountid(customer.getCustomerId());
-        Transfer transfer = new Transfer();
-        model.addAttribute("transfer", transfer);
+        List<Account> accountList=accountsRepository.findAllByAccountid(customer.getId());
+        Transaction transaction = new Transaction();
+        model.addAttribute("transaction", transaction);
         model.addAttribute("customer", customer); // Теперь у нас есть объект Customer, а не Optional
         model.addAttribute("accounts",accountList);
         model.addAttribute("customers", customerList);
         return "customer/aCustomer";
     }
 
-
-    @GetMapping("/new-customer")
-    public String displayEmployeeForm(Model model) {
-        Customer customer = new Customer();
-        model.addAttribute("customer",customer);
-        return "customer/new-customer";
+    @GetMapping("/noAccess")
+    public String noAccess() {
+        return "customer/noAccess";
     }
 
-    @PostMapping("/save")
-    public String createEmployee(Customer customer, Model model) {
-        customerRepository.save(customer);
-        return "redirect:";
-    }
+//    @GetMapping("/new-customer")
+//    public String displayEmployeeForm(Model model) {
+//        Customer customer = new Customer();
+//        model.addAttribute("customer",customer);
+//        return "customer/new-customer";
+//    }
+//
+//    @PostMapping("/save")
+//    public String createEmployee(Customer customer, Model model) {
+//        customerRepository.save(customer);
+//        return "redirect:";
+//    }
 
     @RequestMapping(value = "/transfer/{fromId}", method = RequestMethod.POST)
-    public String transferAmount(@PathVariable String fromId, Transfer transfer, Model model) {
-        Customer toCustomer = customerRepository.findById(Long.parseLong(transfer.getToId())).get();
-        Customer fromCustomer = customerRepository.findById(Long.parseLong(fromId)).get();
-        System.out.println(Long.parseLong(transfer.getToId()));
-        List<Account> fromAccount = accountsRepository.findAllByAccountid(fromCustomer.getCustomerId());
-        List<Account> toAccount = accountsRepository.findAllByAccountid(Long.parseLong(transfer.getToId()));
-        Transaction transaction = new Transaction(generateId(LocalDate.now(),LocalTime.now()),Transaction_type.ACCOUNT_TRANSFER.name(),fromAccount.get(0).getAccountnumber(),
-                toAccount.get(0).getAccountnumber(),transfer.getBalance(), LocalDate.now(), LocalTime.now().withNano(0));
-        transactionRepository.save(transaction);
-        if (fromCustomer.getBalance() >= transfer.getBalance()) {
-            customerRepository.updateCustomer(fromCustomer.getBalance() - transfer.getBalance(),
-                    fromCustomer.getCustomerId());
-            customerRepository.updateCustomer(toCustomer.getBalance() + transfer.getBalance(),
-                    toCustomer.getCustomerId());
-            accountsRepository.updateAccountByAccountnumber(fromAccount.get(0).getAccountnumber(),fromAccount.get(0).getBalance() - transfer.getBalance());
-            accountsRepository.updateAccountByAccountnumber(toAccount.get(0).getAccountnumber(),toAccount.get(0).getBalance() + transfer.getBalance());
-        }
+    public String transferAmount(@PathVariable String fromId, Transaction transaction, Model model) {
+        Account fromAccount =accountsRepository.findByAccountnumber(transaction.getFromaccount_id());
+        Account toAccount =accountsRepository.findByAccountnumber(transaction.getToaccount_id());
+        Transaction transaction2 = new Transaction(generateId(LocalDate.now(),LocalTime.now()),Transaction_type.ACCOUNT_TRANSFER.name(),fromAccount.getAccountnumber(),
+                toAccount.getAccountnumber(),transaction.getAmount(), LocalDate.now(), LocalTime.now().withNano(0));
+        fromAccount.setBalance(fromAccount.getBalance()-transaction.getAmount());
+        toAccount.setBalance(toAccount.getBalance()+transaction.getAmount());
+        transactionRepository.save(transaction2);
         return "redirect:/customers/"+fromId;
     }
 

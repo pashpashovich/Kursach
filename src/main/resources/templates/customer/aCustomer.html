@@ -1,24 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layouts :: header">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/static/css/globals.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style2.css" />
+    <title>Личный кабинет</title>
 </head>
 <body>
 
-<nav th:replace="layouts :: navbar"></nav>
-
-<style>
-    .bgimg {
-        background-image: url('/img/transfer.jpg');
-    }
-</style>
+<nav class="nav-bar">
+    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
+    <span>ПРОГРЕССБАНК</span>
+    <div class="nav-items">
+        <a th:href="@{/customers/{id}(id=${customer.id})}">На главную</a>
+        <a th:href="@{/transactions/{id}(id=${customer.id})}">Мои транзакции</a>
+    </div>
+</nav>
 
 <div class="bgimg">
     <div class="middle">
-
-        <h3><label th:text="${customer.fio}"></label> Аккаунт </h3>
-
-
-        <table class="table table-bordered table-striped">
+        <h3> Добро пожаловать,<label th:text="${customer.fio}"></label> </h3>
+        <table class="table table-success table-striped">
             <thead class="thead-dark">
             <tr>
                 <th>Номер счёта</th>
@@ -29,34 +33,44 @@
             </thead>
             <tbody>
             <tr th:each="account : ${accounts}">
-                <td th:text="${account.getAccountnumber()}"></td>
+                <td th:text="${account.getAccountnumber()}" data-accountnumber="${account.getAccountnumber()}"></td>
                 <td th:text="${account.getBalance()}"></td>
                 <td th:text="${account.getCurrency_t()}"></td>
                 <td th:text="${account.getDate_of_open()}"></td>
             </tr>
             </tbody>
         </table>
-        <h3>Сделать перевод</h3>
-        <br>
-
-        <form data-th-action="@{/customers/transfer/{id}(id=${customer.customerId})}" th:method="POST" th:object="${transfer}">
-            <div class="form-group">
-                <label>Transfer To:</label>
-                    <select th:field="*{toId}" class="selectpicker" data-style="btn-success">
-                        <option th:each="aCustomer : ${customers}"
-                                th:value="${aCustomer.getCustomerId()}"
-                                th:text="${aCustomer.getFio()}">
-                    </select>
-            </div>
-            <div class="form-group">
-                <label for="amount">Cумма перевода:</label>
-                <input type="number" class="form-control" th:field="${transfer.balance}" required id="amount" placeholder="Введите сумму перевода" name="balance">
-            </div>
-            <button type="submit" class="btn btn-success">Подтвердить</button>
+        <form style="margin-left: 5%; margin-right: 5%" data-th-action="@{/customers/transfer/{id}(id=${customer.id})}" th:method="POST" th:object="${transaction}">
+            <select class="form-select form-select-lg mb-3" th:field="*{fromaccount_id}">
+                <option value="" selected disabled>Выберите счет</option>
+                <option th:each="account : ${accounts}" th:value="${account.getAccountnumber()}" th:text="${account.accountnumber}"></option>
+            </select>
+            <br>
+            <input type="number" class="form-control" th:field="${transaction.toaccount_id}" required id="to" placeholder="Введите номер счета для перевода" name="to">
+            <br>
+            <input type="number" class="form-control" th:field="${transaction.amount}" required id="amount" placeholder="Введите сумму перевода" name="sum">
+            <button type="submit" class="button-tr">Подтвердить</button>
         </form>
-        <br>
-        <a th:href="@{/download/{fromId}(fromId=${customer.customerId})}" class="btn btn-primary">Скачать чек</a>
-    </div>
+        <div class="near">
+        <a class="button-t" th:href="@{/download/{fromId}(fromId=${customer.id})}">Скачать чек</a>
+        </div>
+        </div>
 </div>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <img src="/static/img/icon-facebook.svg" alt="" />
+            <img src="/static/img/icon-instagram.svg" alt="" />
+            <img src="/static/img/icon-twitter.svg" alt="" />
+            <img src="/static/img/icon-pinterest.svg" alt="" />
+        </div>
+        <div class="menu">
+            <a href="#">Про нас</a>
+            <a href="#">Свяжитесь с нами</a>
+            <a href="#">Блог</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

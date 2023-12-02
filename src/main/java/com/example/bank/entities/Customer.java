@@ -1,29 +1,21 @@
 package com.example.bank.entities;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import jakarta.persistence.*;
 
+@Data
 @Entity
 @Table(name = "customers")
-@Data
-public class Customer {
+public class Customer extends User{
 
-    @Id
-    private Long customerId;
+    @NotEmpty(message = "Пожалуйста, укажите ФИО")
     private String fio;
-    private String email;
-    private double balance;
     private boolean hasaccess;
-
-
-    public Customer() {
-
-    }
-
-    public Customer(String fio, String email, double balance) {
-        this.fio = fio;
-        this.email = email;
-        this.balance = balance;;
-    }
+    @NotEmpty(message = "Пожалуйста, укажите email")
+    @Email(message = "Пожалуйста, укажите корректный email")
+    private String email;
 }
+

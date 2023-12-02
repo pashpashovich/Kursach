@@ -12,6 +12,7 @@ body, html {
     background-position: center;
     background-size: cover;
     position: relative;
+    margin-bottom: 3rem;
 }
 
 td, th {
@@ -43,7 +44,7 @@ h1,h2,h3 {
     font-family: Arial;
     text-align: center;
     width: 50%;
-    margin: auto;
+    margin-bottom: 100rem;
 }
 
 hr {

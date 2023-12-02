@@ -1,40 +1,88 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="rus">
 <head>
-    <link rel="stylesheet" href="/static/css/globals.css" />
-    <link rel="stylesheet" href="/static/css/style.css"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/style2.css" />
+    <title>ПрогрессБанк</title>
 </head>
 <body>
-<div class="screen">
-    <div class="overlap-group-wrapper">
-        <div class="overlap-group">
-            <img class="image" src="/static/img/image-1.png" />
-            <img
-                    class="logo"
-                    src="/static/img/logo.png"
-            />
-            <div class="rectangle"></div>
-            <div class="text-wrapper">ПрогрессБанк</div>
-            <a class="div" href="/">Подразделения и банкоматы</a>
-            <a class="text-wrapper-2" href="/">Помощь</a>
-            <a class="text-wrapper-3" href="/">Контакты</a>
-            <div class="text-wrapper-4">Приветствуем вас в Интернет-банкинге!</div>
-            <p class="p">
-                Интернет-банкинг позволяет дистанционно совершать платежи, переводы, управлять своими финансами.
-            </p>
-            <img class="img" src="/static/img/rectangle-4.png" />
-            <a class="text-wrapper-5" href="/reg">Регистрация</a>
-            <div class="rectangle-2"></div>
-            <a class="text-wrapper-6" href="/auth">Войти</a>
-            <img class="iconvk" src="img/iconvk-1.svg" />
-            <img class="icontwitter" src="img/icontwitter-1.svg" />
-            <a href="mailto:callcenter@belinvestbank.by" target="_blank" rel="noopener noreferrer"
-            ><div class="text-wrapper-7">callcenter@progressBank.by</div></a
-            >
-            <img class="vector" src="img/vector-1.svg" />
-            <img class="vector-2" src="img/vector.svg" />
+<nav class="nav-bar">
+<!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
+    <span>ПРОГРЕССБАНК</span>
+    <div class="nav-items">
+        <a href="#">Главная</a>
+        <a href="#">Подразделения и банкоматы</a>
+        <a href="#">Помощь</a>
+        <a href="#">Контакты</a>
+    </div>
+</nav>
+<header class="hero-section">
+    <div class="hero-text-container">
+        <h1
+        >Приветствуем вас <br />
+            в Интернет-банкинге!</h1
+        >
+        <p
+        >Интернет-банкинг позволяет дистанционно  <br />
+            совершать платежи, переводы,<br />
+            управлять своими финансами.</p
+        >
+        <button data-href="/auth" onclick="window.location.href = this.dataset.href">Войти</button>
+        <button data-href="/reg" onclick="window.location.href = this.dataset.href">Зарегистрироваться</button>
+    </div>
+    <div class="hero-img-container">
+        <img src="/static/img/main2.png" alt="" />
+    </div>
+</header>
+<div class="container">
+    <section class="why-us">
+        <h1>Почему стоит выбрать ПрогрессБанк?</h1>
+        <p
+        > Мы стараемся сделать всё для комфорта наших клиентов.<br />Управляй своими финансами онлайн.</p>
+    </section>
+    <section class="features-section">
+        <div class="feature-item">
+            <img src="/static/img/icon-online.svg" alt="" />
+            <h1>Интернет-банкинг</h1>
+            <p>Наши современные веб и мобильные <br />
+                приложения сделают возможным управлять  <br />
+                Вашими финансами с любой точки мира<br />
+        </div>
+        <div class="feature-item">
+            <img src="/static/img/icon-budgeting.svg" alt="" />
+            <h1>Контроль</h1>
+            <p
+            >Следите за тем, как расходуются <br />
+                ваши средства каждый месяц<br />
+            </p></div>
+
+        <div class="feature-item">
+            <img src="/static/img/icon-onboarding.svg" alt="" />
+            <h1>Онлайн открытие счета</h1>
+            <p
+            >Необязательно физическое присутствие в отделении банка.<br/>
+                Открывайте счёт всего за несколько минут<br />
+                онлайн в нашем приложении<br /></p>
+        </div>
+    </section>
+    </section>
+</div>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <img src="/static/img/icon-facebook.svg" alt="" />
+            <img src="/static/img/icon-instagram.svg" alt="" />
+            <img src="/static/img/icon-twitter.svg" alt="" />
+            <img src="/static/img/icon-pinterest.svg" alt="" />
+        </div>
+        <div class="menu">
+            <a href="#">Про нас</a>
+            <a href="#">Свяжитесь с нами</a>
+            <a href="#">Блог</a>
         </div>
     </div>
-</div>
+</footer>
 </body>
 </html>

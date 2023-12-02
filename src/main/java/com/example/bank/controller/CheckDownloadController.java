@@ -37,28 +37,26 @@ public class CheckDownloadController {
     AccountsRepository accountsRepository;
 
     @RequestMapping(value = "/download/{fromId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String fromId, Transfer transfer, Model model) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String fromId, Model model) {
         try {
             String fileName = "check_" + System.currentTimeMillis() + ".pdf";
-            File pdfFile = new File("C:/Users/Павел/AppData/Local/Temp/Bank/src/checks/" + fileName);
-
-            // Создайте новый документ PDF
+            File pdfFile = new File("C:/Users/Павел/OneDrive/Рабочий стол/2 курс/3 семестр/ООПиП курсач/Bank/src/checks" + fileName);
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
             document.open();
             Account account = accountsRepository.findFirstByAccountid(Long.parseLong(fromId));
-            Transaction transaction = transactionRepository.findFirstByFromaccountOrderByDateDescTimeDesc(account.getAccountnumber());
+            Transaction transaction2 = transactionRepository.findFirstByFromaccountOrderByDateDescTimeDesc(account.getAccountnumber());
             BaseFont baseFont = BaseFont.createFont("C:/Users/Павел/Downloads/Arial Cyr/Arial Cyr.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(baseFont, 12);
             // Добавьте содержимое в PDF-документ
             Paragraph title = new Paragraph("Банковский чек",font);
             Paragraph checkDetails = new Paragraph("Чек: " + System.currentTimeMillis(),font);
             Paragraph transactionDetails = new Paragraph(
-                    transaction.getDate() + " " + transaction.getTime() + "\n" +
-                            "Тип транзакции: " + transaction.getType_tr() + "\n" +
-                            "Счёт отправителя: " + transaction.getFromaccount_id() + "\n" +
-                            "Счёт получателя: " + transaction.getToaccount_id() + "\n" +
-                            "Сумма транзакции: " + transaction.getAmount(), font
+                    transaction2.getDate() + " " + transaction2.getTime() + "\n" +
+                            "Тип транзакции: " + transaction2.getType_tr() + "\n" +
+                            "Счёт отправителя: " + transaction2.getFromaccount_id() + "\n" +
+                            "Счёт получателя: " + transaction2.getToaccount_id() + "\n" +
+                            "Сумма транзакции: " + transaction2.getAmount(), font
             );
             document.add(title);
             document.add(checkDetails);
@@ -68,7 +66,6 @@ public class CheckDownloadController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("attachment", fileName);
-
             return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

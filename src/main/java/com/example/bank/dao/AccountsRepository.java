@@ -16,13 +16,13 @@ public interface AccountsRepository extends CrudRepository<Account,Long> {
 
     List<Account> findAll();
 
-
    List<Account> findAllByAccountid(Long id);
 
     Account findByAccountid(Long id);
 
     Account findFirstByAccountid(Long id);
 
+    Account findByAccountnumber(Long number);
     @Transactional
     @Modifying
     @Query("UPDATE Account a SET a.balance = :newBalance WHERE a.accountnumber = :accountNumber")

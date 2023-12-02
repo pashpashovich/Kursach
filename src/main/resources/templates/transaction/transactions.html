@@ -1,44 +1,100 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layouts :: header">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/static/css/globals.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style2.css" />
+    <title>Личный кабинет</title>
 </head>
 <body>
 
-<nav th:replace="layouts :: navbar"></nav>
 
-<style>
-    .bgimg {
-        background-image: url('/img/theImage.jpg');
-    }
-</style>
-
-<div class="bgimg">
-    <div class="middle">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-            <tr>
-                <th> Перевод со счёта</th>
-                <th> Перевод на счёт</th>
-                <th>Тип</th>
-                <th>Сумма</th>
-                <th>Дата</th>
-                <th>Время</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="aTransaction : ${transactions}">
-                <td th:text="${aTransaction.getFromaccount_id()}">
-                <td th:text="${aTransaction.getToaccount_id()}">
-                <td th:text="${aTransaction.getType_tr()}">
-                <td th:text="${aTransaction.getAmount()}">
-                <td th:text="${aTransaction.getDate()}">
-                <td th:text="${aTransaction.getTime()}">
-            </tr>
-            </tbody>
-
-        </table>
+<nav class="nav-bar">
+    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
+    <span>ПРОГРЕССБАНК</span>
+    <div class="nav-items">
+        <a th:href="@{/customers/{id}(id=${fromaccount_id})}">На главную</a>
+        <a th:href="@{/transactions/{id}(id=${fromaccount_id})}">Мои транзакции</a>
     </div>
+</nav>
+<h2 class="h2act">Мои действия</h2>
+<div class="choosing">
+    <form th:action="@{/transactions}" th:method="POST" th:object="${accounts}">
+        <input type="hidden" name="fromAccountId" th:value="${fromaccount_id}">
+        <select class="form-select" name="selectedAccountNumber">
+            <option value="" selected disabled>Выберите счет</option>
+            <option th:each="account : ${accounts}" th:value="${account.getAccountnumber()}" th:text="${account.accountnumber}"></option>
+        </select>
+
+        <!-- Выбор поля сортировки -->
+        <select class="form-select form-select-lg mb-3" name="sortField">
+            <option value="amount">Сумма</option>
+            <option value="date">Дата</option>
+        </select>
+
+        <!-- Выбор направления сортировки -->
+        <select class="form-select form-select-lg mb-3" name="sortDirection">
+            <option value="asc">По возрастанию</option>
+            <option value="desc">По убыванию</option>
+        </select>
+
+        <!-- Выбор начальной даты -->
+        <label for="startDate">Начальная дата:</label>
+        <input type="date" id="startDate" name="startDate" required>
+
+        <!-- Выбор конечной даты -->
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" id="endDate" name="endDate" required>
+
+        <button class="button" type="submit">Показать действия</button>
+        <a th:href="@{'/transactions/download-statement?fromAccountId=' + ${fromaccount_id} + '&selectedAccountNumber=' + ${selectedAccountNumber} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate}}">
+            Скачать выписку
+        </a>    </form>
 </div>
+<div class="middle">
+<table class="table table-success table-striped">
+    <thead class="head-dark">
+    <tr>
+        <th> Перевод со счёта</th>
+        <th> Перевод на счёт</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Дата</th>
+        <th>Время</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="aTransaction : ${transactions}">
+        <td th:text="${aTransaction.getFromaccount_id()}">
+        <td th:text="${aTransaction.getToaccount_id()}">
+        <td th:text="${aTransaction.getType_tr()}">
+        <td th:text="${aTransaction.getAmount()}">
+        <td th:text="${aTransaction.getDate()}">
+        <td th:text="${aTransaction.getTime()}">
+    </tr>
+    </tbody>
+
+</table>
+</div>
+<div class="button-dwn">
+</div>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <img src="/static/img/icon-facebook.svg" alt="" />
+            <img src="/static/img/icon-instagram.svg" alt="" />
+            <img src="/static/img/icon-twitter.svg" alt="" />
+            <img src="/static/img/icon-pinterest.svg" alt="" />
+        </div>
+        <div class="menu">
+            <a href="#">Про нас</a>
+            <a href="#">Свяжитесь с нами</a>
+            <a href="#">Блог</a>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>

@@ -1,56 +1,81 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layouts :: header">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/static/css/globals.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style2.css" />
+    <title>Администратор</title>
 </head>
 <body>
+<nav class="nav-bar">
+    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
+    <span>ПРОГРЕССБАНК</span>
+    <div class="nav-items">
+        <a href="#">Главная</a>
+        <a href="#">Рассмотреть заявки</a>
+        <a href="#">Помощь</a>
+        <a href="#">Контакты</a>
+    </div>
+</nav>
 
-<nav th:replace="layouts :: navbar"></nav>
-
-<style>
-    .bgimg {
-        background-image: url('/img/people.jpg');
-    }
-</style>
-
-<div class="bgimg">
-    <div class="middle">
-
-
-
-<div class="container">
-    <h3>Customers</h3>
-    <hr>
-
-    <a th:href="@{/customers/new-customer}"
-       class="btn btn-primary btn-sm mb-3"> 
-        Add Customer 
-    </a> 
-    <br>
-
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
+<h3> Добро пожаловать администратор,<label th:text="${login}"></label> </h3>
+<table class="table table-success table-striped">
+    <thead class="head-dark">
         <tr>
-            <th>Customer Account #</th>
-            <th>Name</th>
+            <th>Номер Аккаунта</th>
+            <th>ФИО</th>
             <th>Email</th>
-            <th>Balance</th>
-            <th>Account</th>
+            <th>Доступ</th>
+            <th>Режим доступа</th>
+            <th>Удалить</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="aCustomer : ${customers}">
-            <td th:text="${aCustomer.customerId}">
+            <td th:text="${aCustomer.id}">
             <td th:text="${aCustomer.fio}">
             <td th:text="${aCustomer.email}">
-            <td th:text="${aCustomer.balance}">
-            <td><a  th:href="@{'/customers/' + ${aCustomer.customerId}}" class="btn btn-primary btn-sm mb-3">Goto Account</a></td>
+            <td th:text="${aCustomer.hasaccess}">
+            <td>
+            <form data-th-action="@{/admin/changeAccess}" th:method="POST">
+                <input type="hidden" name="userId" th:value="${aCustomer.id}" />
+                <button type="submit">Поменять режим доступа</button>
+            </form>
+        </td>
+            <td>
+                <form data-th-action="@{/admin/deleteUser}" th:method="POST">
+                    <input type="hidden" name="userId" th:value="${aCustomer.id}" />
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
         </tr>
         </tbody>
-
     </table>
-</div>
-    </div>
-</div>
 
+<!-- Таблица для отображения заявок на регистрацию -->
+<h3>Заявки на регистрацию</h3>
+<table class="table table-info table-striped">
+    <thead class="head-dark">
+    <tr>
+        <th>ФИО</th>
+        <th>Email</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customerWithAccount : ${customersWithAccounts}">
+        <td th:text="${customerWithAccount.fio}"></td>
+        <td th:text="${customerWithAccount.email}"></td>
+        <td>
+            <form data-th-action="@{/admin/processRegistration}" th:method="POST">
+                <input type="hidden" name="requestId" th:value="${customerWithAccount.id}" />
+                <button type="submit">Обработать заявку</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

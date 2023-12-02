@@ -1,64 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="/static/css/globals.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style2.css" />
+    <title>Авторизация</title>
 </head>
 <body>
 
-<div class="frame">
-    <img class="image" src="/static/img/image-1.png" />
-    <div class="div">
-        <div class="overlap">
-            <div class="text-wrapper">ПрогрессБанк</div>
-            <img
-                    class="kisspng-line-chart"
-                    src="/static/img/logo.png"
-            />
-        </div>
-        <div class="overlap-group">
-            <div class="rectangle">
-                <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-                <div class="login">
-                    <h2 > Авторизация </h2>
-                    <form style="position: absolute; left: 50%; top: 30%; transform: translate(-50%, -50%);" method="post" action="/procces_login">
-                        <input type="text"  class="text" name="username" id="username">
-                        <span>Введите ваш логин</span>
-                        <br>
-                        <br>
-                        <input type="password"  class="text" name="password" id="password">
-                        <span>Введите ваш пароль</span>
-                        <br>
-                        <button class="signin">
-                            Войти
-                        </button>
-                        <hr>
-                        <a href="#">Забыли пароль?</a>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <a href="mailto:callcenter@belinvestbank.by" target="_blank" rel="noopener noreferrer"
-        ></a>
-        <p class="element">
-            <a href="tel:146" target="_blank" rel="noopener noreferrer"
-            ><span class="span"><br /></span
-            ></a>
-            <span class="text-wrapper-8">+375 (17) 255-55-55</span>
-        </p>
+<nav class="nav-bar">
+    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
+    <span>ПРОГРЕССБАНК</span>
+    <div class="nav-items">
+        <a href="#">Главная</a>
+        <a href="#">Подразделения и банкоматы</a>
+        <a href="#">Помощь</a>
+        <a href="#">Контакты</a>
     </div>
+</nav>
+<div class="main-form">
+    <h1>Авторизация</h1>
+<div class="form">
+<form method="post" action="/procces_login">
+    <span>Введите ваш логин</span>
+    <input type="text"  class="form-control" name="username" id="username">
+<br>
+<br>
+    <span>Введите ваш пароль</span>
+    <input type="password"  class="form-control" name="password" id="password">
+<br>
+    <button class="button-f">Войти </button>
+<hr>
+<a th:href="@{/reg}">Нет аккаунта? Зарегистрируйтесь</a>
+</form>
 </div>
-
-    <a href="mailto:callcenter@belinvestbank.by" target="_blank" rel="noopener noreferrer"
-    ><div class="text-wrapper-7">callcenter@progressBank.by</div></a
-    >
-    <p class="element">
-        <a href="tel:146" target="_blank" rel="noopener noreferrer"
-        ><span class="span"><br /></span
-        ></a>
-        <span class="text-wrapper-8">+375 (17) 255-55-55</span>
-    </p>
 </div>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <img src="/static/img/icon-facebook.svg" alt="" />
+            <img src="/static/img/icon-instagram.svg" alt="" />
+            <img src="/static/img/icon-twitter.svg" alt="" />
+            <img src="/static/img/icon-pinterest.svg" alt="" />
+        </div>
+        <div class="menu">
+            <a href="#">Про нас</a>
+            <a href="#">Свяжитесь с нами</a>
+            <a href="#">Блог</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
