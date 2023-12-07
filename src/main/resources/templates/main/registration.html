@@ -11,34 +11,36 @@
 <body>
 
 <nav class="nav-bar">
-    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
-    <span>ПРОГРЕССБАНК</span>
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа(" />
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
     <div class="nav-items">
-        <a href="#">Главная</a>
+        <a th:href="@{/home}">Главная</a>
         <a href="#">Подразделения и банкоматы</a>
         <a href="#">Помощь</a>
         <a href="#">Контакты</a>
     </div>
 </nav>
 <div class="main-form2">
-<h2 > Регистрация </h2>
+<h2> Регистрация </h2>
 <div class="form2">
 <form method="post" th:action="@{/reg}" th:object="${reg}">
+    <div class="form2sp">
     <span>Придумайте себе логин</span>
     <input type ="text" th:field="*{login}" class="form-control" name="username">
-    <br>
+    </div>
     <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
-    <br>
+    <div class="form2sp">
     <span>Придумайте себе пароль</span>
     <input type="password" th:field="*{password}" class="form-control" name="password">
-    <br>
+    </div>
     <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-    <br>
+    <div class="form2sp">
     <span>Введите ваше ФИО</span>
     <input type="text" th:field="*{fio}" class="form-control" name="fio">
-    <br>
+    </div>
     <div style="color: red" th:if="${#fields.hasErrors('fio')}" th:errors="*{fio}"></div>
-    <br>
     <span>Введите ваш email:</span>
     <input type="text" th:field="*{email}" class="form-control" name="email">
     <br>
@@ -47,7 +49,9 @@
         Регистрация
     </button>
 </form>
+    <hr>
 </div>
+<a th:href="@{/auth}">Уже есть аккаунт? Войдите</a>
 </div>
 <div th:if="${successMessage}" class="alert alert-success">
     <p th:text="${successMessage}"></p>

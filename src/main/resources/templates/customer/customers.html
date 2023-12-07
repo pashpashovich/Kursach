@@ -10,17 +10,19 @@
 </head>
 <body>
 <nav class="nav-bar">
-    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
-    <span>ПРОГРЕССБАНК</span>
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа(" />
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
     <div class="nav-items">
-        <a href="#">Главная</a>
-        <a href="#">Рассмотреть заявки</a>
-        <a href="#">Помощь</a>
-        <a href="#">Контакты</a>
+        <a th:href="@{/admin}">Главная</a>
+        <a th:href="@{/admin/applies}">Рассмотреть заявки</a>
+        <a th:href="@{/home}">Выход</a>
     </div>
 </nav>
-
-<h3> Добро пожаловать администратор,<label th:text="${login}"></label> </h3>
+<div class="admin-h">
+<h3> Добро пожаловать, Администратор</h3>
+</div>
 <table class="table table-success table-striped">
     <thead class="head-dark">
         <tr>
@@ -41,41 +43,32 @@
             <td>
             <form data-th-action="@{/admin/changeAccess}" th:method="POST">
                 <input type="hidden" name="userId" th:value="${aCustomer.id}" />
-                <button type="submit">Поменять режим доступа</button>
+                <button class="btn btn-outline-warning" type="submit">Поменять режим доступа</button>
             </form>
         </td>
             <td>
                 <form data-th-action="@{/admin/deleteUser}" th:method="POST">
                     <input type="hidden" name="userId" th:value="${aCustomer.id}" />
-                    <button type="submit">Удалить</button>
+                    <button class="btn btn-danger" type="submit">Удалить</button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-
-<!-- Таблица для отображения заявок на регистрацию -->
-<h3>Заявки на регистрацию</h3>
-<table class="table table-info table-striped">
-    <thead class="head-dark">
-    <tr>
-        <th>ФИО</th>
-        <th>Email</th>
-        <th>Действия</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="customerWithAccount : ${customersWithAccounts}">
-        <td th:text="${customerWithAccount.fio}"></td>
-        <td th:text="${customerWithAccount.email}"></td>
-        <td>
-            <form data-th-action="@{/admin/processRegistration}" th:method="POST">
-                <input type="hidden" name="requestId" th:value="${customerWithAccount.id}" />
-                <button type="submit">Обработать заявку</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <img src="/static/img/icon-facebook.svg" alt="" />
+            <img src="/static/img/icon-instagram.svg" alt="" />
+            <img src="/static/img/icon-twitter.svg" alt="" />
+            <img src="/static/img/icon-pinterest.svg" alt="" />
+        </div>
+        <div class="menu">
+            <a href="#">Про нас</a>
+            <a href="#">Свяжитесь с нами</a>
+            <a href="#">Блог</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

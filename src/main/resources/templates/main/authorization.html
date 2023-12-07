@@ -11,10 +11,12 @@
 <body>
 
 <nav class="nav-bar">
-    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
-    <span>ПРОГРЕССБАНК</span>
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа(" />
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
     <div class="nav-items">
-        <a href="#">Главная</a>
+        <a th:href="@{/home}">Главная</a>
         <a href="#">Подразделения и банкоматы</a>
         <a href="#">Помощь</a>
         <a href="#">Контакты</a>
@@ -33,9 +35,9 @@
 <br>
     <button class="button-f">Войти </button>
 <hr>
-<a th:href="@{/reg}">Нет аккаунта? Зарегистрируйтесь</a>
 </form>
 </div>
+    <a th:href="@{/reg}">Нет аккаунта? Зарегистрируйтесь</a>
 </div>
 <footer class="footer">
     <div class="footer-container">

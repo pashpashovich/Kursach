@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/static/css/globals.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style2.css" />
     <title>Администратор</title>
@@ -17,23 +18,31 @@
         <a th:href="@{/home}">Выход</a>
     </div>
 </nav>
-<div class="main-form3">
-    <h2>Oбработать заявку</h2>
-    <div class="form3">
-    <form action="/admin/save" method="post" th:object="${account}">
-        <div class="form-group">
-            <label for="number">Введите номер счёта:</label>
-            <input type="number" class="form-control" th:field="${account.accountnumber}"  required id="number" placeholder="Введите номер" name="number">
-        </div>
-        <input type="hidden" th:if="${requestId}" th:value="${requestId}" name="requestId" />
-        <div class="form-group">
-            <label for="balance">Введите начальный баланс:</label>
-            <input type="number" class="form-control" th:field="${account.balance}" required id="balance" placeholder="Введите баланс" name="balance">
-        </div>
-        <button type="submit" class="btn btn-success">Подтвердить аккаунт</button>
-            </form>
-    </div>
+
+<div class="applies">
+<h3>Заявки на регистрацию</h3>
 </div>
+<table class="table table-info table-striped">
+    <thead class="head-dark">
+    <tr>
+        <th>ФИО</th>
+        <th>Email</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customerWithAccount : ${customersWithOutAccounts}">
+        <td th:text="${customerWithAccount.fio}"></td>
+        <td th:text="${customerWithAccount.email}"></td>
+        <td>
+            <form data-th-action="@{/admin/processRegistration}" th:method="POST">
+                <input type="hidden" name="requestId" th:value="${customerWithAccount.id}" />
+                <button class="btn btn-success" type="submit">Обработать заявку</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 <footer class="footer">
     <div class="footer-container">
         <div class="social-container">
@@ -49,6 +58,6 @@
         </div>
     </div>
 </footer>
-
 </body>
 </html>
+

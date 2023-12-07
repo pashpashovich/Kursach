@@ -48,10 +48,9 @@
         <label for="endDate">Конечная дата:</label>
         <input type="date" id="endDate" name="endDate" required>
 
+        <a class="button-t" th:href="@{'/transactions/download-statement?fromAccountId=' + ${fromaccount_id} + '&selectedAccountNumber=' + ${selectedAccountNumber} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate}}">Скачать выписку</a>
         <button class="button" type="submit">Показать действия</button>
-        <a th:href="@{'/transactions/download-statement?fromAccountId=' + ${fromaccount_id} + '&selectedAccountNumber=' + ${selectedAccountNumber} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate}}">
-            Скачать выписку
-        </a>    </form>
+    </form>
 </div>
 <div class="middle">
 <table class="table table-success table-striped">
