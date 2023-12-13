@@ -35,7 +35,6 @@ public class AdminsController {
     AccountsRepository accountsRepository;
 
 
-
     @GetMapping
     @Secured("ROLE_ADMIN")
     public String getAnAdmin(Model model) {
@@ -52,6 +51,7 @@ public class AdminsController {
         model.addAttribute("customersWithOutAccounts",customersWithOutAccounts);
         return "customer/customers";
     }
+
     @GetMapping("/applies")
     public String applies(Model model) {
         List<Customer> customerList = customerRepository.findAll();

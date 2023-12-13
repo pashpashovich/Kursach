@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css” />
     <link rel="stylesheet" href="/static/css/globals.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style2.css" />
@@ -16,43 +17,47 @@
         <a th:href="@{/home}">ПРОГРЕССБАНК</a>
     </div>
     <div class="nav-items">
-        <a th:href="@{/home}">Главная</a>
-        <a href="#">Подразделения и банкоматы</a>
-        <a href="#">Помощь</a>
-        <a href="#">Контакты</a>
+        <a class="navigation" th:href="@{/home}">Главная</a>
+        <a class="navigation" th:href="@{/banks}">Подразделения и банкоматы</a>
+        <a class="navigation" th:href="@{/help}">Помощь</a>
+        <a class="navigation" th:href="@{/cont}">Контакты</a>
     </div>
 </nav>
 <div class="main-form">
     <h1>Авторизация</h1>
-<div class="form">
-<form method="post" action="/procces_login">
-    <span>Введите ваш логин</span>
-    <input type="text"  class="form-control" name="username" id="username">
-<br>
-<br>
-    <span>Введите ваш пароль</span>
-    <input type="password"  class="form-control" name="password" id="password">
-<br>
-    <button class="button-f">Войти </button>
-<hr>
-</form>
-</div>
+    <div class="form">
+        <form method="post" th:action="@{/procces_login}">
+            <span>Введите ваш логин</span>
+            <input type="text" class="form-control" name="username" id="username">
+            <br>
+            <br>
+            <span>Введите ваш пароль</span>
+            <input type="password" class="form-control" name="password" id="password">
+            <br>
+            <div th:if="${errorMessage}" class="error-message">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <button class="button-f">Войти </button>
+            <hr>
+        </form>
+    </div>
     <a th:href="@{/reg}">Нет аккаунта? Зарегистрируйтесь</a>
 </div>
 <footer class="footer">
     <div class="footer-container">
         <div class="social-container">
-            <img src="/static/img/icon-facebook.svg" alt="" />
-            <img src="/static/img/icon-instagram.svg" alt="" />
-            <img src="/static/img/icon-twitter.svg" alt="" />
-            <img src="/static/img/icon-pinterest.svg" alt="" />
+            <a href="https://www.facebook.com/myprogressbank/"> <img src="/static/img/icon-facebook.svg" alt="" /> </a>
+            <a href="https://www.instagram.com/progressbank/"> <img src="/static/img/icon-instagram.svg" alt="" /> </a>
+            <a href="https://twitter.com/progressbank?lang=ca"> <img src="/static/img/icon-twitter.svg" alt="" /> </a>
+            <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
         </div>
         <div class="menu">
-            <a href="#">Про нас</a>
-            <a href="#">Свяжитесь с нами</a>
-            <a href="#">Блог</a>
+            <a class="navigation" href="#">Про нас</a>
+            <a class="navigation" href="#">Свяжитесь с нами</a>
+            <a class="navigation" href="#">Блог</a>
         </div>
     </div>
 </footer>
+</div>
 </body>
 </html>

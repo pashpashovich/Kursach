@@ -5,7 +5,9 @@ import com.example.bank.dao.TransactionRepository;
 import com.example.bank.entities.Account;
 import com.example.bank.entities.Transaction;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -106,21 +108,22 @@ public class TransactionController {
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
                 Document document = new Document();
                 PdfWriter.getInstance(document, outputStream);
+                BaseFont baseFont = BaseFont.createFont("C:/Users/Павел/Downloads/Arial Cyr/Arial Cyr.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                Font font = new Font(baseFont, 12);
                 document.open();
-                document.add(new Paragraph("Statement for the period from " + startDate + " to " + endDate));
-                document.add(new Paragraph(" ")); // пустая строка
+                document.add(new Paragraph("Выписка за период с " + startDate + " по " + endDate,font));
+                document.add(new Paragraph(" ",font));
                 List<Transaction> transactions = transactionRepository.findByFromaccountOrToaccountAndDateBetween(
                         Long.parseLong(accountNumber), Long.parseLong(fromAccountId),startDate, endDate);
                 for (Transaction transaction : transactions) {
                     String transactionInfo = String.format(
-                            "Date: %s, Type: %s, Sum: %s%n",
+                            "Дата: %s, Тип: %s, Сумма: %s%n",
                             transaction.getDate(), transaction.getType_tr(), transaction.getAmount());
-                    document.add(new Paragraph(transactionInfo));
+                    document.add(new Paragraph(transactionInfo,font));
                 }
                 document.close();
                 return outputStream.toByteArray();
             } catch (Exception e) {
-                // Обработка ошибок, например, логирование
                 e.printStackTrace();
                 return new byte[0];
             }

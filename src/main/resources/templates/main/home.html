@@ -14,10 +14,10 @@
         <a th:href="@{/home}">ПРОГРЕССБАНК</a>
     </div>
     <div class="nav-items">
-        <a th:href="@{/home}">Главная</a>
-        <a href="#">Подразделения и банкоматы</a>
-        <a href="#">Помощь</a>
-        <a href="#">Контакты</a>
+        <a class="navigation" th:href="@{/home}">Главная</a>
+        <a class="navigation" th:href="@{/banks}">Подразделения и банкоматы</a>
+        <a class="navigation" th:href="@{/help}">Помощь</a>
+        <a class="navigation" th:href="@{/cont}">Контакты</a>
     </div>
 </nav>
 <header class="hero-section">
@@ -31,8 +31,8 @@
             совершать платежи, переводы,<br />
             управлять своими финансами.</p
         >
-        <button data-href="/auth" onclick="window.location.href = this.dataset.href">Войти</button>
-        <button data-href="/reg" onclick="window.location.href = this.dataset.href">Зарегистрироваться</button>
+        <button class="button2" data-href="/auth" onclick="window.location.href = this.dataset.href">Войти</button>
+        <button class="button2" data-href="/reg" onclick="window.location.href = this.dataset.href">Зарегистрироваться</button>
     </div>
     <div class="hero-img-container">
         <img src="/static/img/main2.png" alt="" />
@@ -59,7 +59,6 @@
             >Следите за тем, как расходуются <br />
                 ваши средства каждый месяц<br />
             </p></div>
-
         <div class="feature-item">
             <img src="/static/img/icon-onboarding.svg" alt="" />
             <h1>Онлайн открытие счета</h1>
@@ -74,15 +73,15 @@
 <footer class="footer">
     <div class="footer-container">
         <div class="social-container">
-            <img src="/static/img/icon-facebook.svg" alt="" />
-            <img src="/static/img/icon-instagram.svg" alt="" />
-            <img src="/static/img/icon-twitter.svg" alt="" />
-            <img src="/static/img/icon-pinterest.svg" alt="" />
+            <a href="https://www.facebook.com/myprogressbank/"> <img src="/static/img/icon-facebook.svg" alt="" /> </a>
+            <a href="https://www.instagram.com/progressbank/"> <img src="/static/img/icon-instagram.svg" alt="" /> </a>
+            <a href="https://twitter.com/progressbank?lang=ca"> <img src="/static/img/icon-twitter.svg" alt="" /> </a>
+            <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
         </div>
         <div class="menu">
-            <a href="#">Про нас</a>
-            <a href="#">Свяжитесь с нами</a>
-            <a href="#">Блог</a>
+            <a class="navigation" href="#">Про нас</a>
+            <a class="navigation" href="#">Свяжитесь с нами</a>
+            <a class="navigation" href="#">Блог</a>
         </div>
     </div>
 </footer>

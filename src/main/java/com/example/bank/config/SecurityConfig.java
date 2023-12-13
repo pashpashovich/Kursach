@@ -37,11 +37,15 @@ public class SecurityConfig {
                                 .requestMatchers("static/img/**").permitAll()
                                 .requestMatchers("/auth").permitAll()
                                 .requestMatchers("/home").permitAll()
+                                .requestMatchers("/banks").permitAll()
+                                .requestMatchers("/help").permitAll()
+                                .requestMatchers("/cont").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth")
                         .loginProcessingUrl("/procces_login")
+                        .failureUrl("/auth/failToLog")
                         .successHandler((request, response, authentication) -> {
                             if (authentication.getPrincipal() instanceof OurUserDetails) {
                                 OurUserDetails userDetails = (OurUserDetails) authentication.getPrincipal();
@@ -59,20 +63,17 @@ public class SecurityConfig {
 
                                     }
                                 } else {
-                                    // Обработка ошибки
                                     response.sendRedirect("/error");
                                 }
                             } else {
-                                // Обработка ошибки
                                 response.sendRedirect("/error");
                             }
                         })
-                        .failureUrl("/failToLog")
 
                 ).logout(logout ->
                         logout.permitAll()
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/auth/login"));
+                                .logoutSuccessUrl("/auth"));
 
         http.authenticationProvider(authenticationProvider());
         return http.build();

@@ -7,9 +7,7 @@ import com.example.bank.entities.Account;
 import com.example.bank.entities.Customer;
 import com.example.bank.entities.Transaction;
 import com.example.bank.entities.Transfer;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.commons.io.IOUtils;
@@ -48,7 +46,6 @@ public class CheckDownloadController {
             Transaction transaction2 = transactionRepository.findFirstByFromaccountOrderByDateDescTimeDesc(account.getAccountnumber());
             BaseFont baseFont = BaseFont.createFont("C:/Users/Павел/Downloads/Arial Cyr/Arial Cyr.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font font = new Font(baseFont, 12);
-            // Добавьте содержимое в PDF-документ
             Paragraph title = new Paragraph("Банковский чек",font);
             Paragraph checkDetails = new Paragraph("Чек: " + System.currentTimeMillis(),font);
             Paragraph transactionDetails = new Paragraph(
@@ -58,6 +55,13 @@ public class CheckDownloadController {
                             "Счёт получателя: " + transaction2.getToaccount_id() + "\n" +
                             "Сумма транзакции: " + transaction2.getAmount(), font
             );
+            Paragraph paragraph = new Paragraph();
+            paragraph.add(new Phrase("ПРОГРЕССБАНК", font));
+            Image img = Image.getInstance("C:/Users/Павел/OneDrive/Рабочий стол/2 курс/3 семестр/ООПиП курсач/Bank/src/main/resources/static/img/logo.png");
+            img.setAlignment(Image.LEFT);
+            img.scalePercent(2);
+            paragraph.add(new Chunk(img, 0, 0, true));
+            document.add(paragraph);
             document.add(title);
             document.add(checkDetails);
             document.add(transactionDetails);
@@ -69,7 +73,6 @@ public class CheckDownloadController {
             return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            // Обработка ошибки
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
