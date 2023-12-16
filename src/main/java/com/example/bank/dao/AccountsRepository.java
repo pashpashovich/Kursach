@@ -12,24 +12,10 @@ import java.util.List;
 
 @Repository
 public interface AccountsRepository extends CrudRepository<Account,Long> {
-
-
     List<Account> findAll();
-
    List<Account> findAllByAccountid(Long id);
-
-    Account findByAccountid(Long id);
 
     Account findFirstByAccountid(Long id);
 
     Account findByAccountnumber(Long number);
-    @Transactional
-    @Modifying
-    @Query("UPDATE Account a SET a.balance = :newBalance WHERE a.accountnumber = :accountNumber")
-    void updateAccountByAccountnumber(@Param("accountNumber") Long accountNumber, @Param("newBalance") Double newBalance);
-
-//    @Transactional
-//    @Modifying
-//    @Query(nativeQuery = true, value = "UPDATE customers SET balance = :balance where customer_id = :customerId")
-//    void updateCustomer(@Param("balance") Double balance,@Param("customerId") long customerId);
 }

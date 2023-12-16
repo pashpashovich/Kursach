@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="rus">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/style2.css" />
+    <style>
+        .contacts-content {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 5rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #31d35c;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+    <title>Контакты | ПрогрессБанк</title>
+</head>
+<body>
+<nav class="nav-bar">
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа(" />
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
+    <div class="nav-items">
+        <a class="navigation" th:href="@{/home}">Главная</a>
+        <a class="navigation" th:href="@{/banks}">Подразделения и банкоматы</a>
+        <a class="navigation" th:href="@{/help}">Помощь</a>
+        <a class="navigation" th:href="@{/cont}">Контакты</a>
+    </div>
+</nav>
+
+<div class="contacts-content">
+    <h1>Наши контакты</h1>
+    <p>
+        Свяжитесь с нами для получения дополнительной информации или помощи по нашим услугам.
+    </p>
+
+    <h2>Общая информация</h2>
+    <p>
+        <strong>Адрес:</strong> ул. Примерная, 123456, Город, Страна
+    </p>
+    <p>
+        <strong>Телефон:</strong> +7 (XXX) XXX-XX-XX<br />
+        <strong>Электронная почта:</strong> info@progressbank.ru
+    </p>
+
+    <h2>Служба поддержки</h2>
+    <p>
+        <strong>Телефон:</strong> +7 (XXX) XXX-XX-XX<br />
+        <strong>Электронная почта:</strong> support@progressbank.ru
+    </p>
+
+    <h2>Отдел по работе с клиентами</h2>
+    <p>
+        <strong>Телефон:</strong> +7 (XXX) XXX-XX-XX<br />
+        <strong>Электронная почта:</strong> clients@progressbank.ru
+    </p>
+</div>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <a href="https://www.facebook.com/myprogressbank/"> <img src="/static/img/icon-facebook.svg" alt="" /> </a>
+            <a href="https://www.instagram.com/progressbank/"> <img src="/static/img/icon-instagram.svg" alt="" /> </a>
+            <a href="https://twitter.com/progressbank?lang=ca"> <img src="/static/img/icon-twitter.svg" alt="" /> </a>
+            <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
+        </div>
+        <div class="menu">
+            <a class="navigation" href="#">Про нас</a>
+            <a class="navigation" href="#">Свяжитесь с нами</a>
+            <a class="navigation" href="#">Блог</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
