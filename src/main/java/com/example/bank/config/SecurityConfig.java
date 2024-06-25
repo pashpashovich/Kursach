@@ -1,7 +1,7 @@
 package com.example.bank.config;
 
 import com.example.bank.controller.OurUserDetails;
-import com.example.bank.dao.CustomerRepository;
+import com.example.bank.repository.CustomerRepository;
 import com.example.bank.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +35,7 @@ public class SecurityConfig {
                                 .requestMatchers("static/css/**").permitAll()
                                 .requestMatchers("static/img/**").permitAll()
                                 .requestMatchers("/auth").permitAll()
+                                .requestMatchers("/auth/failToLog").permitAll()
                                 .requestMatchers("/home").permitAll()
                                 .requestMatchers("/banks").permitAll()
                                 .requestMatchers("/help").permitAll()
@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/auth")
                         .loginProcessingUrl("/procces_login")
-                        .failureUrl("/auth/failToLog")
                         .successHandler((request, response, authentication) -> {
                             if (authentication.getPrincipal() instanceof OurUserDetails) {
                                 OurUserDetails userDetails = (OurUserDetails) authentication.getPrincipal();
@@ -57,20 +56,23 @@ public class SecurityConfig {
                                         Long id = ((OurUserDetails) authentication.getPrincipal()).getId();
                                         String targetUrl = "/customers/" + id;
                                         response.sendRedirect(targetUrl);
-                                    }
-                                    else {
+                                    } else {
                                         response.sendRedirect("/customers/noAccess");
 
                                     }
                                 } else {
-                                    response.sendRedirect("/error");
+                                    response.sendRedirect("/auth/failToLog");
                                 }
                             } else {
-                                response.sendRedirect("/error");
+                                response.sendRedirect("/auth/failToLog");
                             }
                         })
+                        .failureHandler((request, response, exception) -> {
+                            response.sendRedirect("/auth/failToLog");
+                        })
 
-                ).logout(logout ->
+                )
+                .logout(logout ->
                         logout.permitAll()
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/auth"));
@@ -80,7 +82,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new OurUserInfoUserDetailsService();
     }
 

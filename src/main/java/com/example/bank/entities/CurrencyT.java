@@ -2,18 +2,18 @@ package com.example.bank.entities;
 
 
 /**
- * This is enum of names of currencies
+ Возможные валюты для переводов
  */
 public enum CurrencyT {
 
-    /** Belarusian rubles*/
+    /** Белорусские рубли*/
     BYN,
-    /** US dollars */
+    /** Доллары США */
     USD,
-    /** Russian rubles */
+    /** Российские рубли */
     RUB,
-    /** Euro*/
+    /** Евродоллары*/
     XEU,
-    /** Chinese yuan*/
+    /** Китайские юани*/
     CNY,
 }

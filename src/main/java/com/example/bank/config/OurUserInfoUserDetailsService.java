@@ -1,7 +1,7 @@
 package com.example.bank.config;
 
 import com.example.bank.controller.OurUserDetails;
-import com.example.bank.dao.UserRepository;
+import com.example.bank.repository.UserRepository;
 import com.example.bank.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

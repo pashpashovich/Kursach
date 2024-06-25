@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <title>Администратор</title>
+</head>
+<nav class="nav-bar">
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа("/>
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
+    <div class="nav-items">
+        <a class="navigation" th:href="@{/admin}">Главная</a>
+        <a class="navigation" th:href="@{/transactions/all}">Транзакции</a>
+        <a class="navigation" th:href="@{/admin/applies}">Рассмотреть заявки</a>
+        <a class="navigation" th:href="@{/logout}">Выход</a>
+    </div>
+</nav>
+<body>
+<div class="container">
+    <h2 th:text="${customer.get().fio} + ' - Счета'" class="text-center"></h2>
+    <table class="table table-success table-striped">
+        <thead class="head-dark">
+        <tr>
+            <th>Номер cчета</th>
+            <th>Баланс</th>
+            <th>Удалить</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="account : ${accounts}">
+            <td th:text="${account.getAccountnumber()}"></td>
+            <td th:text="${account.balance}"></td>
+            <td>
+                <form data-th-action="@{/admin/deleteAccount}" th:method="POST">
+                    <input type="hidden" name="accountNumber" th:value="${account.getAccountnumber()}"/>
+                    <input type="hidden" name="customerId" th:value="${customer.get().id}"/>
+                    <button class="btn btn-danger" type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form data-th-action="@{/admin/addAccount}" th:method="GET">
+        <input type="hidden" name="customerId" th:value="${customer.get().id}"/>
+        <button class="button1" type="submit">Добавить новый счет</button>
+    </form>
+    <h2 style="text-align: center"> Сделать начисление</h2>
+    <form data-th-action="@{/admin/deposit}" th:method="POST">
+        <input type="hidden" name="customerId" th:value="${customer.get().id}"/>
+        <select class="form-select form-select-lg mb-3" th:name="toId" th:field="*{transaction.toaccount}">
+            <option value="" selected disabled>Выберите счет</option>
+            <option th:each="account : ${accounts}" th:value="${account.getAccountnumber()}" th:text="${account.accountnumber}"></option>
+        </select>
+        <input type="number" class="form-control" th:field="${transaction.amount}" required id="amount" placeholder="Введите сумму начисления" name="sum">
+        <button class="button1" type="submit">Начислить на счет</button>
+    </form>
+</div>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <a href="https://www.facebook.com/myprogressbank/"> <img src="/static/img/icon-facebook.svg" alt="" /> </a>
+            <a href="https://www.instagram.com/progressbank/"> <img src="/static/img/icon-instagram.svg" alt="" /> </a>
+            <a href="https://twitter.com/progressbank?lang=ca"> <img src="/static/img/icon-twitter.svg" alt="" /> </a>
+            <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
+        </div>
+        <div class="menu">
+            <a href="https://www.instagram.com/progressbank/" class="navigation" >Про нас</a>
+            <a href="https://www.facebook.com/myprogressbank/" class="navigation" >Свяжитесь с нами</a>
+            <a href="https://twitter.com/progressbank?lang=ca" class="navigation" >Блог</a>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

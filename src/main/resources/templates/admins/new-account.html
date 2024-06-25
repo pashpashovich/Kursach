@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <title>Администратор</title>
+</head>
+<body>
+<nav class="nav-bar">
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа(" />
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
+    <div class="nav-items">
+        <a class="navigation" th:href="@{/admin}">Главная</a>
+        <a class="navigation" th:href="@{/transactions/all}">Транзакции</a>
+        <a class="navigation" th:href="@{/admin/applies}">Рассмотреть заявки</a>
+        <a class="navigation" th:href="@{/logout}">Выход</a>
+    </div>
+</nav>
+<div class="main-form3">
+    <h2>Добавить счёт</h2>
+    <div class="form3">
+        <form action="/admin/saveAccount" method="post" th:object="${account}">
+            <div class="form-group">
+                <label for="number">Введите номер счёта:</label>
+                <input type="number" th:name="accountnumber" class="form-control" th:field="${account.accountnumber}"  required id="number" placeholder="Введите номер" name="number">
+            </div>
+            <input type="hidden" th:value="${Id}" name="requestId" />
+            <div class="form-group">
+                <label for="balance">Введите начальный баланс:</label>
+                <input type="number" th:name="balance" class="form-control" th:field="${account.balance}" required id="balance" placeholder="Введите баланс" name="balance">
+            </div>
+            <button type="submit" class="btn btn-success">Подтвердить аккаунт</button>
+        </form>
+    </div>
+</div>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="social-container">
+            <a href="https://www.facebook.com/myprogressbank/"> <img src="/static/img/icon-facebook.svg" alt="" /> </a>
+            <a href="https://www.instagram.com/progressbank/"> <img src="/static/img/icon-instagram.svg" alt="" /> </a>
+            <a href="https://twitter.com/progressbank?lang=ca"> <img src="/static/img/icon-twitter.svg" alt="" /> </a>
+            <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
+        </div>
+        <div class="menu">
+            <a href="https://www.instagram.com/progressbank/" class="navigation" >Про нас</a>
+            <a href="https://www.facebook.com/myprogressbank/" class="navigation" >Свяжитесь с нами</a>
+            <a href="https://twitter.com/progressbank?lang=ca" class="navigation" >Блог</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+

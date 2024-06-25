@@ -23,10 +23,10 @@ public class Admin extends User{
     }
 
     /**
-     * This static method creates a new object of the class Admin if it wasn't created yet
-     * @param user the object of the class User
-     * @param users the list of all users of the app
-     * @return returns the static field instance
+     * Этот статический метод создает новый объект класса Admin, если он еще не был создан.
+     * @param user объект класса User
+     * @param users список всех пользователей приложения.
+     * @return возвращает экземпляр статического поля
      */
     public static Admin getInstance(User user,List<User> users) {
         if (instance == null) {
@@ -36,28 +36,15 @@ public class Admin extends User{
     }
 
     /**
-     * The constructor of the class for the method getInstance()
-     * @param user_id the unique number of the user
-     * @param login the unique name of the user
-     * @param password the hashed password with salt of the user to get into the app
-     * @param users the list of all users of the app
+     * Конструктор класса для метода getInstance()
+     * @param user_id уникальный номер пользователя
+     * @param login уникальное имя пользователя
+     * @param password — хешированный пароль пользователя для входа в приложение.
+     * @param users список всех пользователей приложения.
      */
     public Admin(Long user_id, String login, String password, List<User> users) {
-        super(user_id.toString(), login, password);
+        super(Long.valueOf(user_id.toString()), login, password);
         Admin.users = users;
     }
 
-    /**
-     * This is a static method that checks the uniqueness of the login that user has entered
-     * @param login the unique name of the user
-     * @return true if the login is unique and false if not
-     */
-    public static boolean isUniqueLogin(String login) {
-//        users=CRUDUtils.getAllUsers();
-        for (User user: users) {
-            if (login.equals(user.getLogin()))
-                return false;
-        }
-        return true;
-    }
 }

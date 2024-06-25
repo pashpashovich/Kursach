@@ -1,78 +1,72 @@
 package com.example.bank.controller;
 
-import com.example.bank.dao.AccountsRepository;
-import com.example.bank.dao.CustomerRepository;
-import com.example.bank.dao.TransactionRepository;
 import com.example.bank.entities.Account;
 import com.example.bank.entities.Customer;
 import com.example.bank.entities.Transaction;
 import com.example.bank.entities.Transaction_type;
+import com.example.bank.services.AccountService;
+import com.example.bank.services.CustomerService;
+import com.example.bank.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Controller
 @RequestMapping("/admin")
 public class AdminsController {
 
-    @Autowired
-    CustomerRepository customerRepository;
+    private final CustomerService customerService;
+    private final AccountService accountService;
+    private final TransactionService transactionService;
 
     @Autowired
-    TransactionRepository transactionRepository;
-
-    @Autowired
-    AccountsRepository accountsRepository;
-
+    public AdminsController(CustomerService customerService, AccountService accountService, TransactionService transactionService)
+    {
+        this.customerService = customerService;
+        this.accountService = accountService;
+        this.transactionService = transactionService;
+    }
 
     @GetMapping
     @Secured("ROLE_ADMIN")
     public String getAnAdmin(Model model) {
-        List<Customer> customerList = customerRepository.findAll();
-        model.addAttribute("customers",customerList);
-        List <Account> accountList=accountsRepository.findAll();
-        List<Long> customerId= new ArrayList<>();
-        for (Account account:accountList) {
-            customerId.add(account.getAccountid());
-        }
-        List<Customer> customersWithOutAccounts = customerList.stream()
-                .filter(customer -> !customerId.contains(customer.getId()))
+        List<Customer> customerList = customerService.getAllCustomers();
+        List<Account> accountList = accountService.getAllAccounts();
+        List<Long> customerId = accountList.stream().map(Account::getAccountid).collect(Collectors.toList());
+        List<Customer> customersWithAccounts = customerList.stream()
+                .filter(customer -> customerId.contains(customer.getId()))
                 .collect(Collectors.toList());
-        model.addAttribute("customersWithOutAccounts",customersWithOutAccounts);
-        return "customer/customers";
+        model.addAttribute("customers", customersWithAccounts);
+        return "admins/customers";
     }
 
     @GetMapping("/applies")
     public String applies(Model model) {
-        List<Customer> customerList = customerRepository.findAll();
-        model.addAttribute("customers",customerList);
-        List <Account> accountList=accountsRepository.findAll();
-        List<Long> customerId= new ArrayList<>();
-        for (Account account:accountList) {
-            customerId.add(account.getAccountid());
-        }
+        List<Customer> customerList = customerService.getAllCustomers();
+        model.addAttribute("customers", customerList);
+
+        List<Account> accountList = accountService.getAllAccounts();
+        List<Long> customerId = accountList.stream().map(Account::getAccountid).collect(Collectors.toList());
+
         List<Customer> customersWithOutAccounts = customerList.stream()
                 .filter(customer -> !customerId.contains(customer.getId()))
                 .collect(Collectors.toList());
-        model.addAttribute("customersWithOutAccounts",customersWithOutAccounts);
-        return "customer/applies";
+
+        model.addAttribute("customersWithOutAccounts", customersWithOutAccounts);
+        return "admins/applies";
     }
+
 
     @PostMapping("/changeAccess")
     public String changeAccess(@RequestParam Long userId) {
-        Customer customer = customerRepository.findById(userId).get();
-        if (customer.isHasaccess()) customerRepository.updateCustomerById(userId,false);
-        else customerRepository.updateCustomerById(userId,true);
+        customerService.updateCustomerAccess(userId, !customerService.getCustomerById(userId).get().isHasaccess());
         return "redirect:/admin";
     }
 
@@ -82,12 +76,19 @@ public class AdminsController {
         return "redirect:/admin/new-customer?requestId=" + requestId;
     }
 
+    @PostMapping("/deleteAppliance")
+    public String deleteAppliance(@RequestParam Long userId) {
+        customerService.deleteCustomer(userId);
+        return "redirect:/admin/applies";
+    }
+
     @PostMapping("/deleteUser")
     public String deleteUser(@RequestParam Long userId) {
-        Customer customer = customerRepository.findById(userId).get();
-        customerRepository.delete(customer);
+        customerService.deleteCustomer(userId);
         return "redirect:/admin";
     }
+
+
 
     @GetMapping("/new-customer")
     public String displayEmployeeForm(@RequestParam(required = false) Long requestId, Model model) {
@@ -96,37 +97,62 @@ public class AdminsController {
         model.addAttribute("customer", customer);
         model.addAttribute("account", account);
         model.addAttribute("requestId", requestId);
-        return "customer/new-customer";
+        return "admins/new-customer";
+    }
+
+
+
+    @GetMapping("/{customerId}")
+    public String viewAccounts(@PathVariable Long customerId, Model model) {
+        Optional<Customer> customer = customerService.getCustomerById(customerId);
+        List<Account> accounts = customerService.getAccountsByCustomerId(customerId);
+        model.addAttribute("customer", customer);
+        model.addAttribute("accounts", accounts);
+        Transaction transaction = new Transaction();
+        model.addAttribute("transaction", transaction);
+        return "admins/accounts";
     }
 
     @PostMapping("/save")
-    public String createAccount(@RequestParam Long requestId,Account account, Model model) {
-        account.setCurrency_t("BLR");
-        account.setDate_of_open(Date.valueOf(LocalDate.now()));
-        account.setAccountid(requestId);
-        accountsRepository.save(account);
+    public String saveCustomer(@RequestParam Long requestId, @RequestParam Long accountnumber, @RequestParam Double balance) {
+        accountService.createAccount(requestId,accountnumber,balance);
         return "redirect:/admin";
     }
 
-    @RequestMapping(value = "/transfer/{fromId}", method = RequestMethod.POST)
-    public String transferAmount(@PathVariable String fromId, Transaction transaction, Model model) {
-        Account fromAccount =accountsRepository.findByAccountnumber(transaction.getFromaccount_id());
-        Account toAccount =accountsRepository.findByAccountnumber(transaction.getToaccount_id());
-        Transaction transaction2 = new Transaction(generateId(LocalDate.now(), LocalTime.now()), Transaction_type.ACCOUNT_TRANSFER.name(),fromAccount.getAccountnumber(),
-                toAccount.getAccountnumber(),transaction.getAmount(), LocalDate.now(), LocalTime.now().withNano(0));
-        fromAccount.setBalance(fromAccount.getBalance()-transaction.getAmount());
-        toAccount.setBalance(toAccount.getBalance()+transaction.getAmount());
-        transactionRepository.save(transaction2);
-        return "redirect:/customers/"+fromId;
+    @PostMapping("/deleteAccount")
+    public String deleteAccount(@RequestParam Long accountNumber, @RequestParam Long customerId) {
+        accountService.deleteAccount(String.valueOf(accountNumber));
+        return "redirect:/admin/"+customerId;
     }
 
-    public long generateId(LocalDate date, LocalTime time) {
-        int year = date.getYear();
-        int month = date.getMonthValue();
-        int day = date.getDayOfMonth();
-        int hours = time.getHour();
-        int minutes = time.getMinute();
-        int seconds = time.getSecond();
-        return (year * 100000000 + month * 1000000 + day * 10000 + hours * 100 + minutes * 10 + seconds);
+    @GetMapping("/addAccount")
+    public String addAccount(@RequestParam(name = "customerId") Long customerId, Model model) {
+        model.addAttribute("Id", customerId);
+        Account account = new Account();
+        model.addAttribute("account", account);
+        return "admins/new-account";
     }
+
+    @PostMapping("/saveAccount")
+    public String saveAccount(@RequestParam Long requestId, @RequestParam Long accountnumber, @RequestParam Double balance) {
+        accountService.createAccount(requestId,accountnumber,balance);
+        return "redirect:/admin/"+requestId;
+    }
+
+
+    @PostMapping( "/deposit")
+    public String deposit(@RequestParam String customerId, Transaction transaction, Model model) {
+        Account toAccount = accountService.getAccountByAccountNumber(String.valueOf(transaction.getToaccount()));
+        transactionService.createTransaction("0", String.valueOf(toAccount.getAccountnumber()), transaction.getAmount(), Transaction_type.DEPOSIT.name(),"BYN");
+        customerService.updateAccountBalance(toAccount,transaction.getAmount());
+        return "redirect:/admin/"+customerId;
+    }
+
+    @PostMapping("/setInterest")
+    public String setInterest(@RequestParam int interest) {
+        accountService.updateAllAccounts(interest);
+        return "redirect:/admin";
+    }
+
+
 }

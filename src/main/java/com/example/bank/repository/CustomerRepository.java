@@ -1,4 +1,4 @@
-package com.example.bank.dao;
+package com.example.bank.repository;
 
 import com.example.bank.entities.Customer;
 import jakarta.transaction.Transactional;

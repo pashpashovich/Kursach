@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="/static/css/globals.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style2.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
     <title>Личный кабинет</title>
 </head>
 <body>
 
 
 <nav class="nav-bar">
-    <!--    <img src="/static/img/logo.png" alt="Нет логотипа(" />-->
-    <span>ПРОГРЕССБАНК</span>
+    <div class="logo">
+        <img src="/static/img/logo.png" alt="Нет логотипа(" />
+        <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+    </div>
     <div class="nav-items">
         <a th:href="@{/customers/{id}(id=${fromaccount_id})}">На главную</a>
         <a th:href="@{/transactions/{id}(id=${fromaccount_id})}">Мои транзакции</a>
@@ -24,31 +25,22 @@
 <div class="choosing">
     <form th:action="@{/transactions}" th:method="POST" th:object="${accounts}">
         <input type="hidden" name="fromAccountId" th:value="${fromaccount_id}">
-        <select class="form-select" name="selectedAccountNumber">
+        <select class="form-select" name="selectedAccountNumber" required>
             <option value="" selected disabled>Выберите счет</option>
             <option th:each="account : ${accounts}" th:value="${account.getAccountnumber()}" th:text="${account.accountnumber}"></option>
         </select>
-
-        <!-- Выбор поля сортировки -->
         <select class="form-select form-select-lg mb-3" name="sortField">
             <option value="amount">Сумма</option>
             <option value="date">Дата</option>
         </select>
-
-        <!-- Выбор направления сортировки -->
         <select class="form-select form-select-lg mb-3" name="sortDirection">
             <option value="asc">По возрастанию</option>
             <option value="desc">По убыванию</option>
         </select>
-
-        <!-- Выбор начальной даты -->
         <label for="startDate">Начальная дата:</label>
         <input type="date" id="startDate" name="startDate" required>
-
-        <!-- Выбор конечной даты -->
         <label for="endDate">Конечная дата:</label>
         <input type="date" id="endDate" name="endDate" required>
-
         <a class="button-t" th:href="@{'/transactions/download-statement?fromAccountId=' + ${fromaccount_id} + '&selectedAccountNumber=' + ${selectedAccountNumber} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate}}">Скачать выписку</a>
         <button class="button" type="submit">Показать действия</button>
     </form>
@@ -67,8 +59,8 @@
     </thead>
     <tbody>
     <tr th:each="aTransaction : ${transactions}">
-        <td th:text="${aTransaction.getFromaccount_id()}">
-        <td th:text="${aTransaction.getToaccount_id()}">
+        <td th:text="${aTransaction.getFromaccount}">
+        <td th:text="${aTransaction.getToaccount}">
         <td th:text="${aTransaction.getType_tr()}">
         <td th:text="${aTransaction.getAmount()}">
         <td th:text="${aTransaction.getDate()}">
@@ -89,9 +81,9 @@
             <img src="/static/img/icon-pinterest.svg" alt="" />
         </div>
         <div class="menu">
-            <a href="#">Про нас</a>
-            <a href="#">Свяжитесь с нами</a>
-            <a href="#">Блог</a>
+            <a href="https://www.instagram.com/progressbank/" class="navigation" >Про нас</a>
+            <a href="https://www.facebook.com/myprogressbank/" class="navigation" >Свяжитесь с нами</a>
+            <a href="https://twitter.com/progressbank?lang=ca" class="navigation" >Блог</a>
         </div>
     </div>
 </footer>

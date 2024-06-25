@@ -1,14 +1,9 @@
 package com.example.bank.controller;
 
-import com.example.bank.dao.AccountsRepository;
-import com.example.bank.dao.TransactionRepository;
 import com.example.bank.entities.Account;
 import com.example.bank.entities.Transaction;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.example.bank.services.AccountService;
+import com.example.bank.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,15 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/transactions")
@@ -38,22 +27,48 @@ import java.util.stream.Collectors;
 public class TransactionController {
 
     @Autowired
-    TransactionRepository transactionRepository;
+    private TransactionService transactionService;
+
     @Autowired
-    AccountsRepository accountsRepository;
+    private AccountService accountService;
 
     @GetMapping("/all")
     public String getTransactions(Model model) {
-        List<Transaction> transactions = transactionRepository.findAll();
-        model.addAttribute("transactions",transactions);
-        return "transaction/transactions";
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        List<Account> accounts = accountService.getAllAccounts();
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("accounts", accounts);
+        return "admins/allTransactions";
     }
 
     @GetMapping("/{fromaccount_id}")
     public String getTransactions(@PathVariable("fromaccount_id") String fromAccountId, Model model) {
-        List<Account> accounts = accountsRepository.findAllByAccountid(Long.valueOf(fromAccountId));
+        List<Account> accounts = accountService.getAccountsByAccountId(Long.valueOf(fromAccountId));
         model.addAttribute("accounts", accounts);
-        return "transaction/transactions";
+        return "customer/transactions";
+    }
+
+    @GetMapping("/allSorted")
+    public String getSTransactions(Model model) {
+        List<Account> accounts = accountService.getAllAccounts();
+        model.addAttribute("accounts", accounts);
+        return "admins/allTransactions";
+    }
+
+    @PostMapping("/allTransactions")
+    public String getAllTransactions(@RequestParam(name = "selectedAccountNumber") Long selectedAccountNumber,
+                                        @RequestParam(name = "sortField", defaultValue = "date") String sortField,
+                                        @RequestParam(name = "sortDirection", defaultValue = "desc") String sortDirection,
+                                        @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                        @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                                        RedirectAttributes redirectAttributes) {
+        List<Transaction> transactions = transactionService.getAllSTransactions(String.valueOf(selectedAccountNumber), sortField, sortDirection, startDate, endDate);
+        redirectAttributes.addFlashAttribute("transactions", transactions);
+        System.out.println(transactions);
+        redirectAttributes.addFlashAttribute("selectedAccountNumber", selectedAccountNumber);
+        redirectAttributes.addFlashAttribute("startDate", startDate);
+        redirectAttributes.addFlashAttribute("endDate", endDate);
+        return "redirect:/transactions/allSorted";
     }
 
     @PostMapping
@@ -65,22 +80,8 @@ public class TransactionController {
                                         @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
                                         RedirectAttributes redirectAttributes) {
 
-        List<Transaction> transactions = new ArrayList<>();
-        Account selectedAccount = accountsRepository.findByAccountnumber(Long.valueOf(selectedAccountNumber));
-        transactions.addAll(transactionRepository.findAllByFromaccountOrToaccount(selectedAccount.getAccountnumber(), selectedAccount.getAccountnumber()));
-        transactions = transactions.stream()
-                .filter(transaction -> transaction.getDate().isAfter(ChronoLocalDate.from(startDate.atStartOfDay()))
-                        && transaction.getDate().isBefore(ChronoLocalDate.from(endDate.plusDays(1).atStartOfDay())))
-                .collect(Collectors.toList());
-        if ("amount".equals(sortField)) {
-            transactions.sort(Comparator.comparing(Transaction::getAmount));
-        } else if ("date".equals(sortField)) {
-            transactions.sort(Comparator.comparing(Transaction::getDate));
-        }
-        if ("desc".equals(sortDirection)) {
-            Collections.reverse(transactions);
-        }
-        System.out.println(selectedAccountNumber);
+        List<Transaction> transactions = transactionService.getTransactions(selectedAccountNumber, fromAccountId, sortField, sortDirection, startDate, endDate);
+
         redirectAttributes.addAttribute("fromaccount_id", fromAccountId);
         redirectAttributes.addFlashAttribute("transactions", transactions);
         redirectAttributes.addFlashAttribute("selectedAccountNumber", selectedAccountNumber);
@@ -95,7 +96,10 @@ public class TransactionController {
             @RequestParam("selectedAccountNumber") String selectedAccountNumber,
             @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) throws IOException {
-        byte[] statementContent = generateStatement(fromAccountId, selectedAccountNumber,startDate, endDate);
+        if (fromAccountId == null || selectedAccountNumber == null || startDate == null || endDate == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        byte[] statementContent = transactionService.generateStatement(fromAccountId, selectedAccountNumber, startDate, endDate);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(statementContent));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=statement.pdf")
@@ -104,30 +108,7 @@ public class TransactionController {
                 .body(resource);
     }
 
-    private byte[] generateStatement(String fromAccountId, String accountNumber, LocalDate startDate, LocalDate endDate) {
-            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                Document document = new Document();
-                PdfWriter.getInstance(document, outputStream);
-                BaseFont baseFont = BaseFont.createFont("C:/Users/Павел/Downloads/Arial Cyr/Arial Cyr.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                Font font = new Font(baseFont, 12);
-                document.open();
-                document.add(new Paragraph("Выписка за период с " + startDate + " по " + endDate,font));
-                document.add(new Paragraph(" ",font));
-                List<Transaction> transactions = transactionRepository.findByFromaccountOrToaccountAndDateBetween(
-                        Long.parseLong(accountNumber), Long.parseLong(fromAccountId),startDate, endDate);
-                for (Transaction transaction : transactions) {
-                    String transactionInfo = String.format(
-                            "Дата: %s, Тип: %s, Сумма: %s%n",
-                            transaction.getDate(), transaction.getType_tr(), transaction.getAmount());
-                    document.add(new Paragraph(transactionInfo,font));
-                }
-                document.close();
-                return outputStream.toByteArray();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new byte[0];
-            }
-    }
+
 
 
 }

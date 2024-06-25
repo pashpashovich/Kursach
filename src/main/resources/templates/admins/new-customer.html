@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style2.css" />
+    <link rel="stylesheet" href="/static/css/style.css"/>
     <title>Администратор</title>
 </head>
 <body>
@@ -15,6 +15,7 @@
     </div>
     <div class="nav-items">
         <a class="navigation" th:href="@{/admin}">Главная</a>
+        <a class="navigation" th:href="@{/transactions/all}">Транзакции</a>
         <a class="navigation" th:href="@{/admin/applies}">Рассмотреть заявки</a>
         <a class="navigation" th:href="@{/logout}">Выход</a>
     </div>
@@ -45,9 +46,9 @@
             <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
         </div>
         <div class="menu">
-            <a href="#">Про нас</a>
-            <a href="#">Свяжитесь с нами</a>
-            <a href="#">Блог</a>
+            <a href="https://www.instagram.com/progressbank/" class="navigation" >Про нас</a>
+            <a href="https://www.facebook.com/myprogressbank/" class="navigation" >Свяжитесь с нами</a>
+            <a href="https://twitter.com/progressbank?lang=ca" class="navigation" >Блог</a>
         </div>
     </div>
 </footer>

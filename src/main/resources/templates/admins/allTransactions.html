@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <title>Все транзакции</title>
+</head>
+<body>
+<nav class="nav-bar">
+  <div class="logo">
+    <img src="/static/img/logo.png" alt="Нет логотипа("/>
+    <a th:href="@{/home}">ПРОГРЕССБАНК</a>
+  </div>
+  <div class="nav-items">
+    <a class="navigation" th:href="@{/admin}">Главная</a>
+    <a class="navigation" th:href="@{/transactions/all}">Транзакции</a>
+    <a class="navigation" th:href="@{/admin/applies}">Рассмотреть заявки</a>
+    <a class="navigation" th:href="@{/logout}">Выход</a>
+  </div>
+</nav>
+<h2 class="h2act">Транзакции</h2>
+<div class="choosing">
+  <form th:action="@{/transactions/allTransactions}" th:method="POST" th:object="${accounts}">
+    <input type="hidden" name="fromAccountId" th:value="${fromaccount_id}">
+    <select class="form-select" name="selectedAccountNumber" required>
+      <option value="" selected disabled>Выберите счет</option>
+      <option th:each="account : ${accounts}" th:value="${account.getAccountnumber()}" th:text="${account.accountnumber}"></option>
+    </select>
+    <select class="form-select form-select-lg mb-3" name="sortField">
+      <option value="amount">Сумма</option>
+      <option value="date">Дата</option>
+    </select>
+    <select class="form-select form-select-lg mb-3" name="sortDirection">
+      <option value="asc">По возрастанию</option>
+      <option value="desc">По убыванию</option>
+    </select>
+    <label for="startDate">Начальная дата:</label>
+    <input type="date" id="startDate" name="startDate" required>
+    <label for="endDate">Конечная дата:</label>
+    <input type="date" id="endDate" name="endDate" required>
+    <button class="button" type="submit">Показать действия</button>
+  </form>
+</div>
+<div class="middle">
+  <table class="table table-success table-striped">
+    <thead class="head-dark">
+    <tr>
+      <th> Перевод со счёта</th>
+      <th> Перевод на счёт</th>
+      <th>Тип</th>
+      <th>Сумма</th>
+      <th>Дата</th>
+      <th>Время</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="aTransaction : ${transactions}">
+      <td th:text="${aTransaction.getFromaccount()}">
+      <td th:text="${aTransaction.getToaccount()}">
+      <td th:text="${aTransaction.getType_tr()}">
+      <td th:text="${aTransaction.getAmount()}">
+      <td th:text="${aTransaction.getDate()}">
+      <td th:text="${aTransaction.getTime()}">
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="button-dwn">
+</div>
+<footer class="footer">
+  <div class="footer-container">
+    <div class="social-container">
+      <a href="https://www.facebook.com/myprogressbank/"> <img src="/static/img/icon-facebook.svg" alt="" /> </a>
+      <a href="https://www.instagram.com/progressbank/"> <img src="/static/img/icon-instagram.svg" alt="" /> </a>
+      <a href="https://twitter.com/progressbank?lang=ca"> <img src="/static/img/icon-twitter.svg" alt="" /> </a>
+      <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
+    </div>
+    <div class="menu">
+      <a href="https://www.instagram.com/progressbank/" class="navigation" >Про нас</a>
+      <a href="https://www.facebook.com/myprogressbank/" class="navigation" >Свяжитесь с нами</a>
+      <a href="https://twitter.com/progressbank?lang=ca" class="navigation" >Блог</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
+

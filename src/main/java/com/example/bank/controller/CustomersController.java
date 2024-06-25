@@ -1,9 +1,7 @@
 package com.example.bank.controller;
 
-import com.example.bank.dao.AccountsRepository;
-import com.example.bank.dao.CustomerRepository;
-import com.example.bank.dao.TransactionRepository;
 import com.example.bank.entities.*;
+import com.example.bank.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -11,9 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,31 +21,26 @@ import java.util.Optional;
 public class CustomersController {
 
     @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
-    TransactionRepository transactionRepository;
-
-    @Autowired
-    AccountsRepository accountsRepository;
+    private CustomerService customersService;
 
     @GetMapping
     public String getCustomers(Model model) {
-        List<Customer> customerList = customerRepository.findAll();
+        List<Customer> customerList = customersService.getAllCustomers();
         model.addAttribute("customers", customerList);
-        return "customer/customers";
+        return "admins/customers";
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     @Secured("ROLE_USER")
-    public String getACustomer(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
-        Optional<Customer> customerOptional = customerRepository.findById(Long.parseLong(id));
+    public String getACustomer(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        Optional<Customer> customerOptional = customersService.getCustomerById(id);
         Customer customer = customerOptional.orElse(new Customer());
-        List<Customer> customerList = customerRepository.findAll();
-        List<Account> accountList = accountsRepository.findAllByAccountid(customer.getId());
+        List<Customer> customerList = customersService.getAllCustomers();
+        List<Account> accountList = customersService.getAccountsByCustomerId(customer.getId());
         Transaction transaction = new Transaction();
+        model.addAttribute("currency",CurrencyT.values());
         model.addAttribute("transaction", transaction);
-        model.addAttribute("customer", customer); // Теперь у нас есть объект Customer, а не Optional
+        model.addAttribute("customer", customer);
         model.addAttribute("accounts", accountList);
         model.addAttribute("customers", customerList);
         String errorMessage = (String) redirectAttributes.getFlashAttributes().get("errorMessage");
@@ -59,10 +53,10 @@ public class CustomersController {
         return "customer/noAccess";
     }
 
-    @RequestMapping(value = "/transfer/{fromId}", method = RequestMethod.POST)
-    public String transferAmount(@PathVariable String fromId, Transaction transaction, RedirectAttributes redirectAttributes) {
-        Account fromAccount = accountsRepository.findByAccountnumber(transaction.getFromaccount_id());
-        Account toAccount = accountsRepository.findByAccountnumber(transaction.getToaccount_id());
+    @PostMapping("/transfer/{fromId}")
+    public String transferAmount(@PathVariable Long fromId, Transaction transaction, RedirectAttributes redirectAttributes) {
+        Account fromAccount = customersService.findAccountByAccountNumber(String.valueOf(transaction.getFromaccount()));
+        Account toAccount = customersService.findAccountByAccountNumber(String.valueOf(transaction.getToaccount()));
         if (fromAccount == null || toAccount == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Такого счёта не существует");
             return "redirect:/customers/" + fromId;
@@ -75,30 +69,38 @@ public class CustomersController {
             redirectAttributes.addFlashAttribute("errorMessage", "Неверная сумма для перевода");
             return "redirect:/customers/" + fromId;
         }
+        long transactionId = customersService.generateTransactionId();
         Transaction transaction2 = new Transaction(
-                generateId(LocalDate.now(), LocalTime.now()),
+                transactionId,
                 Transaction_type.ACCOUNT_TRANSFER.name(),
                 fromAccount.getAccountnumber(),
                 toAccount.getAccountnumber(),
                 transaction.getAmount(),
                 LocalDate.now(),
-                LocalTime.now().withNano(0)
+                LocalTime.now().withNano(0),
+                transaction.getCurrency()
         );
-        fromAccount.setBalance(fromAccount.getBalance() - transaction.getAmount());
-        toAccount.setBalance(toAccount.getBalance() + transaction.getAmount());
-        transactionRepository.save(transaction2);
+        customersService.updateAccountBalances(fromAccount, toAccount, transaction.getAmount(), transaction.getCurrency());
+        customersService.saveTransaction(transaction2);
         return "redirect:/customers/" + fromId;
     }
 
-
-    public long generateId(LocalDate date, LocalTime time) {
-        int year = date.getYear();
-        int month = date.getMonthValue();
-        int day = date.getDayOfMonth();
-        int hours = time.getHour();
-        int minutes = time.getMinute();
-        int seconds = time.getSecond();
-        return (year * 100000000 + month * 1000000 + day * 10000 + hours * 100 + minutes * 10 + seconds);
+    @PostMapping("/deleteUser/{userId}")
+    public String deleteUser(@PathVariable Long userId) {
+        Customer customer = customersService.getCustomerById(userId).orElse(null);
+        if (customer != null) {
+            customersService.deleteCustomer(customer);
+        }
+        return "redirect:/customers";
     }
 
+    @PostMapping("/changeAccess/{userId}")
+    public String changeAccess(@PathVariable Long userId) {
+        Customer customer = customersService.getCustomerById(userId).orElse(null);
+        if (customer != null) {
+            boolean hasAccess = !customer.isHasaccess();
+            customersService.updateCustomerAccess(userId, hasAccess);
+        }
+        return "redirect:/customers";
+    }
 }

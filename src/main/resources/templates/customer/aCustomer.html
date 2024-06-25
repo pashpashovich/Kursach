@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="/static/css/globals.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style2.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
     <title>Личный кабинет</title>
 </head>
 <body>
@@ -44,12 +43,17 @@
             </tbody>
         </table>
         <form style="margin-left: 5%; margin-right: 5%" data-th-action="@{/customers/transfer/{id}(id=${customer.id})}" th:method="POST" th:object="${transaction}">
-            <select class="form-select form-select-lg mb-3" th:field="*{fromaccount_id}">
+            <select class="form-select form-select-lg mb-3" th:field="*{fromaccount}">
                 <option value="" selected disabled>Выберите счет</option>
                 <option th:each="account : ${accounts}" th:value="${account.getAccountnumber()}" th:text="${account.accountnumber}"></option>
             </select>
             <br>
-            <input type="number" class="form-control" th:field="${transaction.toaccount_id}" required id="to" placeholder="Введите номер счета для перевода" name="to">
+            <input type="number" class="form-control" th:field="${transaction.toaccount}" required id="to" placeholder="Введите номер счета для перевода" name="to">
+            <br>
+            <select class="form-select form-select-lg mb-3" th:field="*{currency}">
+                <option value="" selected disabled>Выберите валюту</option>
+                <option th:each="currency : ${T(com.example.bank.entities.CurrencyT).values()}" th:value="${currency}" th:text="${currency}"></option>
+            </select>
             <br>
             <input type="number" class="form-control" th:field="${transaction.amount}" required id="amount" placeholder="Введите сумму перевода" name="sum">
             <button type="submit" class="button-tr">Подтвердить</button>
@@ -73,9 +77,9 @@
             <a href="https://www.pinterest.com/pin/1147151336315591346/"> <img src="/static/img/icon-pinterest.svg" alt="" /> </a>
         </div>
         <div class="menu">
-            <a href="#">Про нас</a>
-            <a href="#">Свяжитесь с нами</a>
-            <a href="#">Блог</a>
+            <a href="https://www.instagram.com/progressbank/" class="navigation" >Про нас</a>
+            <a href="https://www.facebook.com/myprogressbank/" class="navigation" >Свяжитесь с нами</a>
+            <a href="https://twitter.com/progressbank?lang=ca" class="navigation" >Блог</a>
         </div>
     </div>
 </footer>
